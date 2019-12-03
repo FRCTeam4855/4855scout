@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Scouter :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>MY SCOUTED TEAMS</h1>
+		<ul id="scoutedList">
+			<li>You have no teams scouted. Click below to start scouting!</li>
+		</ul>
+		<div class="buttonList">
+			<a href="scout_form.html" onclick="set_source()">Create new</a>
+			<a href="#" onclick="export_data('scouter')">Export data</a>
+			<a class="clearButton" href="scouter_main.html" onclick="reset_data()">Reset all</a>
+		</div>
+		<div class="buttonList">
+			<a href="../index.html">Go back</a>
+		</div>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/export_data.js"></script>
+		<script>
+			function set_source() {
+				localStorage.source = "scout";
+			}
+			function load_data() {
+				let init = localStorage.init;
+				if (init) {
+					// Show the form IDs of all forms that have been completed
+					document.getElementById("scoutedList").innerHTML = "";
+					if (typeof localStorage.currentID !== "undefined") localStorage.removeItem("currentID");
+					var teamList = JSON.parse(localStorage.teamList);
+					var formList = JSON.parse(localStorage.formList);
+					var ds = "", fid = "";	// Display string, Form ID
+					for (let i = 0; i < localStorage.sheets; i ++) {
+						fid = "form-" + teamList[i] + "-" + formList[i];
+						ds = "<li><h2>" + teamList[i] + "</h2><h3>" + get_team_name(teamList[i]) + "</h3><a href='scout_view_data.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + fid + "</li>";
+						document.getElementById("scoutedList").innerHTML += ds;
+					}
+				}
+			}
+			function set_view_data(id) {
+				localStorage.currentID = id;
+			}
+			function reset_data() {
+				// Remove everything from localStorage
+				localStorage.clear();
+				var teamList = JSON.parse(localStorage.teamList);
+				var formList = JSON.parse(localStorage.formList);
+				for (let i = 0; i < localStorage.sheets; i ++) {
+					localStorage.removeItem("form-" + teamList[i] + "-" + formList[i]);
+				}
+				localStorage.removeItem("init");
+				localStorage.removeItem("sheets");
+				localStorage.removeItem("teamList");
+				localStorage.removeItem("formList");
+			}
+			
+			
+		</script>
+	</body>
+</html>

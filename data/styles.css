@@ -1,0 +1,298 @@
+/* CSS Document */
+
+html {
+	min-height: 100%;
+}
+body {
+	padding: 40px 2% 70px;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	background-image: -webkit-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
+	background-image: linear-gradient(180deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	background-attachment: fixed;
+}
+h1 {
+	text-align: center;
+	font-size: 240%;
+}
+h2 {
+	color: #412561;
+}
+h3 {
+	text-align: center;
+}
+strong {
+	text-decoration: none;
+}
+a {
+	font-weight: 250;
+	color: #6E3FA5;
+	text-decoration: none;
+}
+a:hover {
+	color: #9E77CB;
+}
+#titleRam {
+	width: 100px;
+	margin: auto;
+	display: block;
+	height: auto;
+}
+#buttonList, .buttonList {
+	text-align: center;
+	margin-top: 32px;
+	font-size: 120%;
+}
+#buttonList a, .buttonList a {
+	background-color: #764BA3;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	padding: 12px;
+	text-decoration: none;
+}
+#buttonList a:hover, .buttonList a:hover {
+	background-color: #9f7cc3;
+}
+.buttonList .clearButton {
+	background-color: #A34B56;
+}
+.buttonList .clearButton:hover {
+	background-color: #C37C7C;
+}
+#rpiRankInfo {
+	background-color: #D2D2D2;
+	border: 2px solid black;
+	max-width: 700px;
+	padding: 12px;
+	margin: 20px auto;
+}
+#rpiRankInfo ol {
+	text-align: center;
+	font-size: 110%;
+}
+
+/*Display styles for items on a scouter's or a master's data sheet list*/
+#scoutedList, #masterTeamList {
+	margin: 30px 6px 24px;
+	list-style-type: none;
+	padding: 12px;
+	background-color: #412561;
+	text-align: center;
+}
+#scoutedList li, #masterTeamList li {
+	padding: 18px;
+	display: inline-block;
+	border-width: 2px;
+	margin: 6px;
+	border-style: solid;
+	background-color: #D2D2D2;
+	width: 220px;
+	vertical-align: middle;
+	min-height: 140px;
+}
+#scoutedList li h2, #masterTeamList h2 {
+	text-align: center;
+	font-size: 170%;
+	padding: 0;
+	margin: 6px 0 10px;
+}
+#scoutedList li h3, #masterTeamList h3 {
+	text-align: center;
+	font-size: 120%;
+	font-style: italic;
+	font-weight: normal;
+}
+#tbalink {
+	text-align: center;
+}
+#tbalink a {
+	font-weight: normal;
+	font-style: italic;
+}
+#rpi {
+	color: #412561;
+	font-size: 160%;
+	text-decoration: underline;
+	font-weight: normal;
+	margin-bottom: 12px;
+}
+#rpiInfo {
+	border: 2px solid #000;
+	padding: 14px;
+	margin: 14px auto;
+	max-width: 500px;
+	display: block;
+	text-align: center;
+	background-color: #D2D2D2;
+}
+#rpiAdjusts {
+	text-align: center;
+	font-style: italic;
+	margin-bottom: 12px;
+}
+
+/*Display styles for a form's data*/
+.formData {
+	padding: 12px;
+	margin: 12px;
+	max-width: 400px;
+	border: 2px solid #000;
+	display: inline-block;
+	background-color: #D2D2D2;
+}
+.formData h2 {
+	text-align: center;
+	font-size: 200%;
+	padding: 0;
+	margin: 10px 0 10px;
+}
+.formData h3 {
+	text-align: center;
+	font-size: 130%;
+	font-style: italic;
+	font-weight: normal;
+}
+.formData ul {
+	list-style-type: none;
+	padding: 0 0 16px;
+}
+.formData ul li {
+	text-align: center;
+}
+
+/*Display styles for a list of forms (or just one form) that have all their data being shown*/
+#teamReports {
+	text-align: center;
+	background-color: #412561;
+}
+#teamReports .formData {
+	vertical-align: middle;
+}
+#reportList {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+#reportList .formData {
+	max-width: 500px;
+}
+.rate {
+	font-weight: 260;
+	font-size: 115%;
+	text-decoration: underline;
+}
+.breaksmall {
+	display: block;
+	margin-top: 12px;
+}
+
+/*Display styles for the scouting form element itself*/
+#scout {
+	padding: 12px 24px;
+	margin: 0 8%;
+	background-color: #412561;
+}
+#scout label, #scout input, #scout textarea, #scout select {
+	margin: 8px;
+	display: inline;
+}
+#scout input {
+	box-shadow: inset 0 0 0.25rem #fff;
+	resize: none;
+	padding: 5px;
+}
+#scout textarea {
+	padding: 6px;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	border-radius: 8px;
+  	box-shadow: inset 0 0 0.25rem #fff;
+	resize: none;
+}
+#scout fieldset {
+	margin: 8px;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+}
+#scout input[type="submit"] {
+	background-color: #764BA3;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	font-size: 125%;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	display: block;
+	padding: 12px;
+	text-decoration: none;
+	box-shadow: none;
+	margin: 20px auto;
+}
+#scout input[type="submit"]:hover  {
+	background-color: #9f7cc3;
+	cursor: pointer;
+}
+
+/* Display styles for the import screen AND the simulate match screen*/
+#import {
+	padding: 12px 24px;
+	margin: 45px auto;
+	background-color: #412561;
+	display: block;
+	width: 300px;
+	text-align: center;
+}
+#import input[type="file"] {
+	text-align: center;
+	color: white;
+	font-size: 100%;
+}
+#import input[type="submit"], #simulateForm input[type="submit"] {
+	background-color: #764BA3;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	font-size: 125%;
+	color: white;
+	display: inline-block;
+	border: 2px solid #000;
+	display: block;
+	padding: 12px;
+	text-decoration: none;
+	box-shadow: none;
+	margin: 20px auto;
+}
+#import input[type="submit"]:hover, #simulateForm input[type="submit"]:hover  {
+	background-color: #9f7cc3;
+	cursor: pointer;
+}
+#simulateForm {
+	text-align: center;
+}
+.allianceForm {
+	max-width: 470px;
+	width: 40%;
+	display: inline-block;
+	text-align: center;
+	margin: 8px;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+	padding: 10px 10px 30px;
+}
+.teamSelect {
+	margin: 7px;
+	text-size: 115%;
+}
+#simMatchResults {
+	text-align: center;
+	max-width: 400px;
+	padding: 8px;
+	display: none;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #D2D2D2;
+	margin-top: 32px;
+	margin-left: auto;
+	margin-right: auto;
+}

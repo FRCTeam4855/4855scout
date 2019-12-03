@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>View Report :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1 id="reportDisplay">VIEWING REPORT </h1>
+		<div id="reportList">
+			
+		</div>
+		<div id="buttonList">
+			<a href="scouter_main.html">Go back</a>
+		</div>
+		
+		<script type="text/javascript" src="../script/extract_data.js"></script>
+		<script type="text/javascript" src="../script/show_data.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script>
+			function load_data() {
+				// Display report number
+				document.getElementById("reportDisplay").innerHTML += localStorage.currentID;
+				
+				// Extract report information
+				var myJSON = localStorage.getItem(localStorage.currentID);
+				var myForm = JSON.parse(myJSON);
+				
+				form_print_data(myForm, document.getElementById("reportList"));
+			}
+		</script>
+	</body>
+</html>

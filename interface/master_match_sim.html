@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Simulate Match :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+    	<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>SIMULATE MATCH</h1>
+		<p>
+			Use this interface to simulate any matchup between two alliances.
+		</p>
+		
+		<form id="simulateForm" action="" onSubmit="return false">
+			<fieldset id="redAllianceForm" class="allianceForm">
+				<h3>RED ALLIANCE</h3>
+				<select name="redTeam1" id="redTeam1" class="teamSelect" required>
+					 <option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="redTeam2" id="redTeam2" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="redTeam3" id="redTeam3" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select>
+			</fieldset>
+			
+			<fieldset id="blueAllianceForm" class="allianceForm">
+				<h3>BLUE ALLIANCE</h3>
+				<select name="blueTeam1" id="blueTeam1" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="blueTeam2" id="blueTeam2" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select><br>
+				<select name="blueTeam3" id="blueTeam3" class="teamSelect" required>
+					<option value="" disabled selected>Pick a team</option>
+				</select>
+			</fieldset>
+			<input type="submit" value="Begin match!">
+		</form>
+		
+		<div id="simMatchResults">
+		</div>
+		
+		<div class="buttonList">
+			<a href="master_main.html">Go back</a>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/get_team_name.js"></script>
+	<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+	<script>
+		window.addEventListener('load', function() {
+			var form = document.getElementById("simulateForm");
+			// On submit, do stuff
+			form.onsubmit = function(e) {
+				e.preventDefault();
+				// Simulate the match by evaluating RPIs of each team. Cargo scoring ability is weighted higher than hatches, only slightly
+				// Calculate team's overall RPI
+				
+				var oddDifferential = 0;	// + for red, - for blue
+				var ovrAdjust, cargoAdjust, hatchAdjust, climbAdjust, defenseAdjust;
+				
+				var rt1RPI = get_rpi(document.getElementById("redTeam1").value);
+				var rt2RPI = get_rpi(document.getElementById("redTeam2").value);
+				var rt3RPI = get_rpi(document.getElementById("redTeam3").value);
+				var bt1RPI = get_rpi(document.getElementById("blueTeam1").value);
+				var bt2RPI = get_rpi(document.getElementById("blueTeam2").value);
+				var bt3RPI = get_rpi(document.getElementById("blueTeam3").value);
+				
+				var rtRPI = rt1RPI[0] + rt2RPI[0] + rt3RPI[0];
+				var btRPI = bt1RPI[0] + bt2RPI[0] + bt3RPI[0];
+				ovrAdjust = (rtRPI - btRPI) * .18;
+				
+				var rtCargo = rt1RPI[1] + rt2RPI[1] + rt3RPI[1];
+				if (Math.max(rt1RPI[1], rt2RPI[1], rt3RPI[1]) >= 40) rtCargo += 25;
+				var btCargo = bt1RPI[1] + bt2RPI[1] + bt3RPI[1];
+				if (Math.max(bt1RPI[1], bt2RPI[1], bt3RPI[1]) >= 40) btCargo += 25;
+				cargoAdjust = (rtCargo - btCargo) * 1.65;
+				
+				var rtHatch = rt1RPI[2] + rt2RPI[2] + rt3RPI[2];
+				if (Math.max(rt1RPI[2], rt2RPI[2], rt3RPI[2]) >= 40) rtHatch += 20;
+				var btHatch = bt1RPI[2] + bt2RPI[2] + bt3RPI[2];
+				if (Math.max(bt1RPI[2], bt2RPI[2], bt3RPI[2]) >= 40) btHatch += 20;
+				hatchAdjust = (rtHatch - btHatch) * 1.5;
+				
+				var rtClimb = rt1RPI[3] + rt2RPI[3] + rt3RPI[3];
+				var btClimb = bt1RPI[3] + bt2RPI[3] + bt3RPI[3];
+				climbAdjust = (rtClimb - btClimb) * 1.45;
+				
+				var rtDefense = rt1RPI[5] + rt2RPI[5] + rt3RPI[5];
+				if (rtDefense > 18) {
+					cargoAdjust += 12;
+					hatchAdjust += 7;
+				}
+				var btDefense = bt1RPI[5] + bt2RPI[5] + bt3RPI[5];
+				if (btDefense > 18) {
+					cargoAdjust -= 12;
+					hatchAdjust -= 7;
+				}
+				defenseAdjust = (rtDefense - btDefense) * .9;
+				
+				oddDifferential += ovrAdjust + cargoAdjust + hatchAdjust + climbAdjust + defenseAdjust;
+				
+				// Begin to assemble display string
+				var disp = document.getElementById("simMatchResults");
+				disp.innerHTML = "";
+				disp.style.display = "block";
+				var dispString = ""
+				if (oddDifferential > 5)
+					dispString = "<h2>RED ALLIANCE PROJECTED TO WIN</h2>";
+				else if (oddDifferential < -5)
+					dispString = "<h2>BLUE ALLIANCE PROJECTED TO WIN</h2>";
+				else dispString = "<h2>MATCH IS A TOSSUP</h2>";
+				
+				dispString += "<h4>Differential: <i>" + oddDifferential + "</i></h4>";
+				dispString += "<p>Overall adjustment: " + ovrAdjust + "</p>";
+				dispString += "<p>Cargo adjustment: " + cargoAdjust + "</p>";
+				dispString += "<p>Hatch adjustment: " + hatchAdjust + "</p>";
+				dispString += "<p>Climb adjustment: " + climbAdjust + "</p>";
+				dispString += "<p>Defense adjustment: " + defenseAdjust + "</p>";
+				
+				disp.innerHTML = dispString;
+			}
+		});
+		
+		// Does all the dirty work of collecting all the forms needed to calculate the RPI and just returns the RPI
+		function get_rpi(teamno) {
+			// Grab team list and form ID list
+			var teamList = JSON.parse(localStorage.teamList);
+			var formList = JSON.parse(localStorage.formList);
+			var indexList = [];
+
+			// Extract report information
+			for (var i = 0; i < teamList.length; i ++) {
+				if (teamList[i] == teamno) indexList.push(i);
+			}
+
+			var formArray = [];
+
+			// Now print out all the relevant forms
+			for (var i = 0; i < indexList.length; i ++) {
+				thisID = "form-" + teamno + "-" + formList[indexList[i]];
+				var myJSON = localStorage.getItem(thisID);
+				var myForm = JSON.parse(myJSON);
+				formArray.push(myForm);
+			}
+			return calculate_rpi(formArray);
+		}
+		
+		function load_data() {
+			if (localStorage.masterInit) {
+				// Show the team numbers that have data
+				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				var teamLists = document.getElementsByClassName("teamSelect");
+
+				Array.prototype.forEach.call(teamLists, function(list) {
+					// Do stuff here
+					for (var i = 0; i < teamsWithData.length; i ++) {
+						list.innerHTML += '<option value="' + teamsWithData[i] + '">' + teamsWithData[i] + '</option>';
+					}
+				});
+			}
+		}
+	</script>
+</html>

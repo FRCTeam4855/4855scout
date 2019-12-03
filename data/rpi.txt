@@ -1,0 +1,39 @@
+Ramageddon power index
+
+Start with 400
+
+Only starting on level 1 sandstorm: -20
+Able to start level 2: +20
+
+Ratings for rocket, cargo ship cargo + hatches
+-1 (incapable): -50
+0 (didn't do): 0
+1 (really bad): -35
+2 (kinda bad): -15
+3 (decent): +15
+4 (good): +30
+5 (awesome): +50
+
+Rating for defense
+0 (didn't do): 0
+1 (really bad): -20
+2 (kinda bad): 0
+3 (decent): 10
+4 (good): 15
+5 (awesome): 20
+
+Rating for climb
+Never did: -30
+Level 1 MAX: -30
+Level 2 MAX: 0
+Level 3 MAX: 30
+
+1: -25
+2: -15
+3: 0
+4: +15
+5: +30
+
+Good team flag: +30
+Penalty flag: -60
+Broken down flag: -40

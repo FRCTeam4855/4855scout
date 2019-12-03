@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>RPI Rankings :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>RPI RANKINGS</h1>
+		<div id="rpiRankInfo">
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the general quality of a team based on all of its scouting sheets. RPI begins at 200 and is adjusted based on all ratings; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+
+			<ol id="rpiRankings">
+
+			</ol>
+		</div>
+		
+		<div id="buttonList">
+			<a href="master_main.html">Go back</a>
+		</div>
+		
+		<script type="text/javascript" src="../script/extract_data.js"></script>
+		<script type="text/javascript" src="../script/show_data.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+		<script>
+			function load_data() {
+				// Pull arrays of teams
+				var teamList = JSON.parse(localStorage.teamList);
+				var formList = JSON.parse(localStorage.formList);
+				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				
+				// Iterate through and generate all RPIs
+				var rpis = [];
+				for (var i = 0; i < teamsWithData.length; i ++) {
+					// First, acquire the array of forms for this team
+					var thisTeam = teamsWithData[i];
+					var formArray = [];
+					for (var j = 0; j < teamList.length; j ++) {
+						if (teamList[j] == thisTeam) {
+							formArray.push(JSON.parse(localStorage.getItem("form-" + thisTeam + "-" + formList[j])));
+						}
+					}
+					rpis[i] = calculate_rpi(formArray)[0];
+				}
+				var teamRanks = teamsWithData;
+				
+				// Sort both arrays by RPI
+				// 1. combine the arrays:
+				var list = [];
+				for (j = 0; j < teamRanks.length; j++) {
+					list.push({'team': teamRanks[j], 'rpi': rpis[j]});
+				}
+
+				// 2. sort:
+				list.sort((a,b) => Number(b.rpi) - Number(a.rpi));
+
+				// 3. separate them back out:
+				for (var k = 0; k < list.length; k++) {
+					teamRanks[k] = list[k].team;
+					rpis[k] = list[k].rpi;
+				}
+				
+				// Print to ordered list
+				var displayString = "";
+				for (i = 0; i < teamRanks.length; i ++) {
+					displayString += "<li><strong>" + teamRanks[i] + "</strong> - " + rpis[i] + "</li>";
+				}
+				document.getElementById("rpiRankings").innerHTML = displayString;
+				
+			}
+		</script>
+	</body>
+</html>

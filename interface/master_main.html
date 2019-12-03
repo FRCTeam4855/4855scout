@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Master :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+    	<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>MY DATA</h1>
+		<ul id="masterTeamList">
+			<li>You have no teams in your database. Import some data by clicking below!</li>
+		</ul>
+		<div class="buttonList">
+			<a href="scout_form.html" onclick="set_source()">Create new data</a>
+			<a href="master_upload.html">Import data</a>
+			<a href="#" onclick="export_data('master')">Export data</a>
+			<a class="clearButton" href="master_main.html" onclick="reset_data()">Reset all</a>
+		</div>
+		<div class="buttonList">
+			<a href="master_rpi_rankings.html">RPI Rankings</a>
+			<a href="master_match_sim.html">Simulate Match</a>
+			<a href="../index.html">Go back</a>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/get_team_name.js"></script>
+	<script type="text/javascript" src="../script/export_data.js"></script>
+	<script>
+		function set_source() {
+			localStorage.source = "master";
+		}
+		function load_data() {
+			if (localStorage.masterInit) {
+				// Show the team numbers that have data
+				document.getElementById("masterTeamList").innerHTML = "";
+				if (typeof localStorage.currentTeam !== "undefined") localStorage.removeItem("currentTeam");
+				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				var teamList = JSON.parse(localStorage.teamList);
+				
+				var ds = "", fid = "";	// Display string, Form ID
+				for (let i = 0; i < teamsWithData.length; i ++) {
+					fid = teamsWithData[i];	// the team number in a string
+					var formNum = 0;
+					// Find out how many forms we have of this team in the database
+					for (let j = 0; j < teamList.length; j ++) {
+						if (fid == teamList[j]) formNum ++;
+					}
+					ds = "<li><h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
+					document.getElementById("masterTeamList").innerHTML += ds;
+				}
+			}
+		}
+		function set_view_data(id) {
+			localStorage.currentTeam = id;
+		}
+		function reset_data() {
+			// Remove everything from localStorage
+			console.log("The master's localStorage is being reset...");
+			localStorage.clear();
+			localStorage.removeItem("masterInit");
+			var teamList = JSON.parse(localStorage.teamList);
+			var formList = JSON.parse(localStorage.formList);
+			for (let i = 0; i < localStorage.sheets; i ++) {
+				localStorage.removeItem("form-" + teamList[i] + "-" + formList[i]);
+			}
+			localStorage.removeItem("sheets");
+			localStorage.removeItem("teamList");
+			localStorage.removeItem("formList");
+			localStorage.removeItem("teamsWithData");
+			console.log("Master reset completed successfully");
+		}
+	</script>
+</html>

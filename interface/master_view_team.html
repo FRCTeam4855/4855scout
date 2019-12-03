@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>View Team Data :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1 id="reportDisplay">VIEWING REPORTS FOR TEAM </h1>
+		<h4 id="tbalink"></h4>
+		<div id="rpiInfo">
+			<h3 id="rpi">CALCULATED RPI: </h3>
+			<p id="rpiAdjusts"></p>
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the general quality of a team based on all of its scouting sheets. RPI begins at 200 and is adjusted based on all ratings; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+		</div>
+		<div id="teamReports">
+			
+		</div>
+		<div id="buttonList">
+			<a href="master_main.html">Go back</a>
+		</div>
+		
+		<script type="text/javascript" src="../script/extract_data.js"></script>
+		<script type="text/javascript" src="../script/show_data.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+		<script>
+			function load_data() {
+				// Display team number and blue alliance link
+				var team = localStorage.currentTeam;
+				document.getElementById("reportDisplay").innerHTML += team;
+				document.getElementById("tbalink").innerHTML = "<a href=" + '"https://www.thebluealliance.com/team/' + team + '" target="_blank">Find team ' + team + " on The Blue Alliance</a>";
+				
+				// Grab team list and form ID list
+				var teamList = JSON.parse(localStorage.teamList);
+				var formList = JSON.parse(localStorage.formList);
+				var indexList = [];
+				
+				// Extract report information
+				for (var i = 0; i < teamList.length; i ++) {
+					if (teamList[i] == team) indexList.push(i);
+				}
+				
+				var formArray = [];
+				
+				// Now print out all the relevant forms
+				for (var i = 0; i < indexList.length; i ++) {
+					thisID = "form-" + team + "-" + formList[indexList[i]];
+					var myJSON = localStorage.getItem(thisID);
+					var myForm = JSON.parse(myJSON);
+					formArray.push(myForm);
+					form_print_data(myForm, document.getElementById("teamReports"));
+				}
+				
+				// Print out the RPI
+				var powerInfo = calculate_rpi(formArray);
+				document.getElementById("rpi").innerHTML += "<strong>" + powerInfo[0] + "</strong> (" + powerInfo[4] + ")";
+				document.getElementById("rpiAdjusts").innerHTML += "Cargo Adjustment: " + powerInfo[1] + "  ~~  Hatch Adjustment: " + powerInfo[2] + "  ~~  Climb Adjustment: " + powerInfo[3];
+				
+			}
+		</script>
+	</body>
+</html>
