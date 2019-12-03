@@ -14,7 +14,7 @@ Before you use this program at a competition, please ensure that you are using t
 
 2. Installation
 
-If you're reading this, then your scouter is probably already installed. Congratulations! This folder should be unzipped to a secure location on your device.
+If you're reading this, then you're either on GitHub or your scouter is already installed. If you're on GitHub, you can download this whole folder to your device and unzip it to a secure location on your device. If you're all installed, then congratulations!
 
 3. How to Run
 
