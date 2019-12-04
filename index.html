@@ -15,6 +15,11 @@
 			<a href="interface/scouter_main.html">I am a scouter</a>
 			<a href="interface/master_main.html">I am the master scouter</a>
 		</div>
-		<h4 style="text-align: center;">Version 2019.0 Beta</h4>
+		<h4 style="text-align: center;">Version <span></span> Beta</h4>
 	</body>
+	<script type="text/javascript" src="script/get_version.js"></script>
+	<script>
+		get_version();
+		document.querySelector("h4 span").innerHTML = get_version_string();
+	</script>
 </html>

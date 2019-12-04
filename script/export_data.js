@@ -10,15 +10,18 @@ function export_data(dataType) {
 			formID = "form-" + teamList[i] + "-" + formList[i];
 			scoutList[formID] = JSON.parse(localStorage.getItem(formID));
 		}
+		scoutList.EXPORT_VERSION = get_version();
 		JSONlist = JSON.stringify(scoutList);
 
 		// Create a unique ID for this set of data
 		let dataID = Math.round(Math.random() * (999999 - 100000) + 100000);
 
 		// Download the JSON file with all scouting data in it
+		// The file will be named "data-2019.0-123456" (version number, random ID number)
 		var prefix = "data-";
+		var exportVer = get_version_string() + "-";
 		if (dataType == "master") prefix = "MASTERDUMP-";
-		downloadObjectAsJson(JSONlist, prefix + dataID.toString());
+		downloadObjectAsJson(JSONlist, prefix + exportVer + dataID.toString());
 	} else alert("You can't export when you haven't scouted any teams yet!");
 }
 function downloadObjectAsJson(exportObj, exportName){

@@ -35,44 +35,62 @@ window.addEventListener('load', function() {
 					var formList = new Array(0);
 					var teamsWithData = new Array(0);
 					var sheets = 0;
+					// Iterate through each JSON file within the jsonArray
 					for (i = 0; i < jsonArray.length; i ++) {
 						// somewhere we overstringified... requiring 2 calls to JSON.parse
 						var myFile = JSON.parse(JSON.parse(jsonArray[i]));	
 						console.log(myFile);
 						var myFormNames = Object.keys(myFile);	// extract only the full names of each form
-						for (var j = 0; j < myFormNames.length; j ++) {
-							// Now access the JSONs within the JSON
-							// Jesus Christ it's JSON Bourne
-							var thisFormName = myFormNames[j];
-							var thisForm = myFile[thisFormName];
-							var localListCheck;
-							if (localStorage.masterInit) {
-								// Check if this form already exists in the database
-								console.log(localStorage.getItem(thisFormName));
-								if (localStorage.getItem(thisFormName) == undefined) {
-									// Add to database
-									formList.push(thisForm.formID);
-									teamList.push(thisForm.teamno);
-									localListCheck = teamsWithData.indexOf(thisForm.teamno);
-									var databaseListCheck = JSON.parse(localStorage.teamsWithData).indexOf(thisForm.teamno);
-									if (localListCheck == -1 && databaseListCheck == -1) teamsWithData.push(thisForm.teamno);
-									teamsWithData.sort((a,b) => Number(a) - Number(b));
-									sheets ++;
-									// Set the new data entries into localStorage
-									localStorage.setItem(thisFormName, JSON.stringify(thisForm));
-								} else console.log("Form with form ID " + thisFormName + " was thrown out: duplicate form");
-							} else {
-								if (localStorage.getItem(thisFormName) == undefined) {
-									// Add to database
-									formList.push(thisForm.formID);
-									teamList.push(thisForm.teamno);
-									localListCheck = teamsWithData.indexOf(thisForm.teamno);
-									if (localListCheck == -1) teamsWithData.push(thisForm.teamno);
-									teamsWithData.sort((a,b) => Number(a) - Number(b));
-									sheets ++;
-									// Set the new data entries into localStorage
-									localStorage.setItem(thisFormName, JSON.stringify(thisForm));
-								} else console.log("Form with form ID " + thisFormName + " was thrown out: duplicate form");
+						var exportVer = parseFloat(myFile.EXPORT_VERSION, 10);
+						// File is from a different year. DON'T IMPORT
+						if (Math.floor(exportVer) != Math.floor(get_version())) {
+							alert("A file is from a different scouter version and different year. This file cannot be imported and it has been skipped.");
+						} else {
+							// Versions might be slightly different. Check for this and don't import files from future versions
+							if (exportVer > get_version()) {
+								// File is newer than scouter. DON'T IMPORT
+								alert("A file is from a newer version of the scouter than this one. This file cannot be imported and it has been skipped.");
+								continue;
+							}
+							if (exportVer < get_version()) {
+								// File is older than scouter. Import anyway but prompt
+								alert("A file is from an older version of the scouter than this one. This file has been imported, but its contents could possibly cause issues.");
+							}
+							// Iterate through each form in this file, but skip the object containing the version number
+							for (var j = 0; j < myFormNames.length - 1; j ++) {
+								// Now access the JSONs within the JSON
+								// Jesus Christ it's JSON Bourne
+								var thisFormName = myFormNames[j];
+								var thisForm = myFile[thisFormName];
+								var localListCheck;
+								if (localStorage.masterInit) {
+									// Check if this form already exists in the database
+									console.log(localStorage.getItem(thisFormName));
+									if (localStorage.getItem(thisFormName) == undefined) {
+										// Add to database
+										formList.push(thisForm.formID);
+										teamList.push(thisForm.teamno);
+										localListCheck = teamsWithData.indexOf(thisForm.teamno);
+										var databaseListCheck = JSON.parse(localStorage.teamsWithData).indexOf(thisForm.teamno);
+										if (localListCheck == -1 && databaseListCheck == -1) teamsWithData.push(thisForm.teamno);
+										teamsWithData.sort((a,b) => Number(a) - Number(b));
+										sheets ++;
+										// Set the new data entries into localStorage
+										localStorage.setItem(thisFormName, JSON.stringify(thisForm));
+									} else console.log("Form with form ID " + thisFormName + " was thrown out: duplicate form");
+								} else {
+									if (localStorage.getItem(thisFormName) == undefined) {
+										// Add to database
+										formList.push(thisForm.formID);
+										teamList.push(thisForm.teamno);
+										localListCheck = teamsWithData.indexOf(thisForm.teamno);
+										if (localListCheck == -1) teamsWithData.push(thisForm.teamno);
+										teamsWithData.sort((a,b) => Number(a) - Number(b));
+										sheets ++;
+										// Set the new data entries into localStorage
+										localStorage.setItem(thisFormName, JSON.stringify(thisForm));
+									} else console.log("Form with form ID " + thisFormName + " was thrown out: duplicate form");
+								}
 							}
 						}
 					}
