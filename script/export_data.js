@@ -11,8 +11,9 @@ function export_data(dataType) {
 			scoutList[formID] = JSON.parse(localStorage.getItem(formID));
 		}
 		scoutList.EXPORT_VERSION = get_version();
-		JSONlist = JSON.stringify(scoutList);
-
+		//JSONlist = JSON.stringify(scoutList);
+		JSONlist = scoutList;			// prior line was stringifying JSON data twice
+		
 		// Create a unique ID for this set of data
 		let dataID = Math.round(Math.random() * (999999 - 100000) + 100000);
 

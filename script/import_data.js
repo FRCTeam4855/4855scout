@@ -37,8 +37,8 @@ window.addEventListener('load', function() {
 					var sheets = 0;
 					// Iterate through each JSON file within the jsonArray
 					for (i = 0; i < jsonArray.length; i ++) {
-						// somewhere we overstringified... requiring 2 calls to JSON.parse
-						var myFile = JSON.parse(JSON.parse(jsonArray[i]));	
+						// removed double JSON parse call here
+						var myFile = JSON.parse(jsonArray[i]);	
 						console.log(myFile);
 						var myFormNames = Object.keys(myFile);	// extract only the full names of each form
 						var exportVer = parseFloat(myFile.EXPORT_VERSION, 10);
@@ -50,6 +50,11 @@ window.addEventListener('load', function() {
 							if (exportVer > get_version()) {
 								// File is newer than scouter. DON'T IMPORT
 								alert("A file is from a newer version of the scouter than this one. This file cannot be imported and it has been skipped.");
+								continue;
+							}
+							// Known version discrepency issues. Block import
+							if (exportVer == 2019.1 && exportVer < get_version()) {
+								alert("A file is from an older version known to have breaking issues with this version. This file cannot be imported and it has been skipped.");
 								continue;
 							}
 							if (exportVer < get_version()) {
