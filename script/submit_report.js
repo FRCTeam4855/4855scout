@@ -6,7 +6,7 @@ window.addEventListener('load', function() {
 	// On submit, do stuff
 	form.onsubmit = function(e) {
 		e.preventDefault(); 
-		var name = "", teamno = "", matchno = "", formID;
+		var name = "", teamno = "", matchno = "", timestamp = "", eventkey = "", formID;
 		var sslevel = "", ssscoring = "";
 		var cscargo = "", cscargoexp = "", rcargo = "", rcargoexp = "";
 		var cshatch = "", cshatchexp = "", rhatch = "", rhatchexp = "";
@@ -28,6 +28,10 @@ window.addEventListener('load', function() {
 		name = document.getElementById("inName").value;
 		teamno = document.getElementById("inTeamno").value;
 		matchno = document.getElementById("inMatchno").value;
+		var d = new Date();
+		var m = d.getMonth() + 1;
+		timestamp = m.toString() + "-" + d.getDate() + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
+		eventkey = document.getElementById("inEventkey").value;
 		
 		sslevel = document.getElementById("inSslevel").value;
 		ssscoring = document.getElementById("inSsscoring").value;
@@ -60,6 +64,8 @@ window.addEventListener('load', function() {
 			"name": name, 
 			"teamno": teamno, 
 			"matchno": matchno,
+			"timestamp": timestamp,
+			"eventkey": eventkey,
 			"sslevel": sslevel,
 			"ssscoring": ssscoring,
 			"cscargo": cscargo,

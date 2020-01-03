@@ -17,7 +17,8 @@ function form_print_data(form, element) {
 	displayString += "<h3>" + teamname + "</h3>";
 	displayString += '<ul class = "qualityList"><li>Scouter Name: ' + name + '</li>';
 	displayString += "<li>Form ID: form-" + teamno + "-" + formID + "</li>";
-	displayString += "<li>Collected during match #: " + matchno + "</li></ul>";
+	displayString += "<li>Collected during match #" + matchno + " at event: " + form.eventkey + "</li>";
+	displayString += "<li>Timestamp: " + form.timestamp + "</li></ul>";
 	
 	// Sandstorm
 	displayString += '<ul class = "qualityList"><li class="rate">Sandstorm Level: <strong>' + form.sslevel + '</strong></li>';

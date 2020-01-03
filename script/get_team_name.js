@@ -46,6 +46,8 @@ function get_team_name(teamno) {
 			return "The Robodawgs";
 		case 302:
 			return "The Dragons";
+		case 322:
+			return "Team F.I.R.E.";
 		case 494:
 			return "Martians";
 		case 503:
