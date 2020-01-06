@@ -68,6 +68,8 @@ function get_team_name(teamno) {
 			return "Dragons";
 		case 1254:
 			return "Tech Force";
+		case 1504:
+			return "Desperate Penguins";
 		case 1677:
 			return "Quantum Ninjas";
 		case 1684:
@@ -128,14 +130,20 @@ function get_team_name(teamno) {
 			return "Q Branch";
 		case 4362:
 			return "CSPA Gems";
+		case 4377:
+			return "Boyne City Blaze";
 		case 4381:
 			return "Twisted Devils";
 		case 4408:
 			return "Panthera Machina";
 		case 4409:
 			return "Ground Zero";
+		case 4453:
+			return "The Red Hot Chili Bots";
 		case 4482:
 			return "ID Robotics";
+		case 4779:
+			return "RoboSapiens";
 		case 4855:
 			return "Ramageddon";
 		case 4956:
@@ -208,6 +216,10 @@ function get_team_name(teamno) {
 			return "Cyberstangs";
 		case 6137:
 			return "Falcon Robotics";
+		case 6425:
+			return "The Conclave";
+		case 6550:
+			return "Wildcat Robotics";
 		case 6568:
 			return "Decatur Robotics Team";
 		case 6588:
@@ -242,10 +254,16 @@ function get_team_name(teamno) {
 			return "MagiTech";
 		case 7809:
 			return "Valhalla Nation";
+		case 7811:
+			return "Flamin' Hot Tigers";
 		case 7814:
 			return "River Valley Mustang Gearheads";
+		case 7911:
+			return "Belding RoboKnights";
 		case 8126:
 			return "Control Freaks";
+		case 8363:
+			return "Marcellus W1LdBots";
 		default:
 			return "???";
 	}

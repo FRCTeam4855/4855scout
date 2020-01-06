@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>New Verbal Report :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>NEW VERBAL REPORT</h1>
+		<div class="buttonList" style="margin-bottom: 36px;">
+			<a href="scout_form.html">Match Form</a>
+		</div>
+		<form id="scout" action="" onsubmit="return false">
+			
+			<fieldset>
+				<input type="hidden" id="formtype" name="formtype" value="verbal">
+				<label for="name">Scouter Name</label><input id="inName" name="name" required><br>
+				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
+				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">General</h3>
+				<label for="drivetrain"><strong>Robot</strong> - Drive train</label>
+				<select name="drivetrain" id="inDrivetrain" required>
+					<option value="Tank">Tank - Wheels</option>
+					<option value="Tank-Treaded">Tank - Tank Treads</option>
+					<option value="Mecanum">Mecanum</option>
+					<option value="Swerve">Swerve</option>
+					<option value="Crab">Crab</option>
+					<option value="Other">Other</option>
+				</select><br>
+				<label for="weight"><strong>Robot</strong> - Weight (lbs)</label>
+				<input name="weight" id="inWeight" autocomplete="off" required><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Gameplay</h3>
+				<label for="innerport"><strong>Power Port</strong> - Inner port hit rate</label>
+				<select name="innerport" id="inInnerport" required>
+					<option value="0">Unable to hit consistently</option>
+					<option value="1">Usually hits consistently</option>
+				</select><br>
+				<label for="defense"><strong>Defense</strong> - Willingness to perform</label>
+				<select name="defense" id="inDefense" required>
+					<option value="0">Complete incapability</option>
+					<option value="1">Would rather not</option>
+					<option value="2">Able and willing</option>
+				</select><br>
+				<input type="checkbox" name="cp2" id="inCp2"><label for="cp2">Able to spin the control panel to activate Stage 2</label><br>
+				<input type="checkbox" name="cp3" id="inCp3"><label for="cp3">Able to spin the control panel to activate Stage 3</label><br>
+			</fieldset>
+			
+			<fieldset>
+				<h3 class="fieldsetHead">Miscellaneous</h3>
+				<label for="comments" style="display: inline-block; margin-top: 7px;">Anything else you'd like to tell us about your robot? (200 character max):</label><br>
+				<textarea id="inComments" name="comments" rows="4" cols="85" maxlength="200" placeholder="Your comments here..."></textarea>
+			</fieldset>
+			
+			<input type="submit" value="Submit Form">
+		</form>
+		<div class="buttonList">
+			<a id="cancelButton" href="scouter_main.html">Cancel</a>
+		</div>
+		<script type="text/javascript" src="../script/submit_report.js"></script>
+		<script type="text/javascript" src="../script/get_version.js"></script>
+	</body>
+</html>

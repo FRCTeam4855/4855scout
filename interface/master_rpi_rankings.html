@@ -9,8 +9,16 @@
 	<body onload="load_data()">
 		<h1>RPI RANKINGS</h1>
 		<div id="rpiRankInfo">
-			<small>A team's RPI (Ramageddon Power Index) is used to represent the general quality of a team based on all of its scouting sheets. RPI begins at 200 and is adjusted based on all ratings; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
-
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance. RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+			<form id="rpilist" onSubmit="false">
+				<label for="filterByEvent">Filter by event key: </label>
+				<input type="checkbox" id="filterByEvent" name="filterByEvent"><br>
+				<label for="filterByEvent">Event key: </label>
+				<select id="eventKey" name="eventKey" onChange="localStorage.filterKey = document.getElementById('eventKey').value;">
+					
+				</select>
+				<input type="button" value="Apply" onClick="load_data();" style="margin: 10px auto;">
+			</form>
 			<ol id="rpiRankings">
 
 			</ol>
@@ -30,10 +38,25 @@
 				var teamList = JSON.parse(localStorage.teamList);
 				var formList = JSON.parse(localStorage.formList);
 				var teamsWithData = JSON.parse(localStorage.teamsWithData);
+				var eventKeys = [];
+				
+				// Iterate through every form and see what event keys there are to choose from to filter by
+				for (var i = 0; i < formList.length; i ++) {
+					var ek = JSON.parse(localStorage.getItem("form-" + teamList[i] + "-" + formList[i])).eventkey;
+					if (eventKeys.indexOf(ek) == -1) eventKeys.push(ek);
+				}
+				
+				// Now add each one to the select list
+				var ds = '<option value="" selected disabled>Pick an event key</option>';
+				for (i = 0; i < eventKeys.length; i ++) {
+					ds += '<option value="' + eventKeys[i] + '">' + eventKeys[i] + '</option>';
+				}
+				document.getElementById("eventKey").innerHTML = ds;
+				document.getElementById("eventKey").value = localStorage.filterKey;
 				
 				// Iterate through and generate all RPIs
-				var rpis = [];
-				for (var i = 0; i < teamsWithData.length; i ++) {
+				var rpis = [], teamRanks = [];
+				for (i = 0; i < teamsWithData.length; i ++) {
 					// First, acquire the array of forms for this team
 					var thisTeam = teamsWithData[i];
 					var formArray = [];
@@ -42,9 +65,12 @@
 							formArray.push(JSON.parse(localStorage.getItem("form-" + thisTeam + "-" + formList[j])));
 						}
 					}
-					rpis[i] = calculate_rpi(formArray)[0];
+					var rpi = calculate_rpi(formArray, true, document.getElementById("filterByEvent").checked, localStorage.filterKey, false, "")[0];
+					if (rpi != -999) {
+						teamRanks.push(thisTeam);
+						rpis.push(rpi);
+					}
 				}
-				var teamRanks = teamsWithData;
 				
 				// Sort both arrays by RPI
 				// 1. combine the arrays:
@@ -65,10 +91,15 @@
 				// Print to ordered list
 				var displayString = "";
 				for (i = 0; i < teamRanks.length; i ++) {
-					displayString += "<li><strong>" + teamRanks[i] + "</strong> - " + rpis[i] + "</li>";
+					displayString += "<li><a href='master_view_team.html' onclick='set_view_data(" + '"' + teamRanks[i] + '"' + ")'>" + teamRanks[i] + "</a> - <em>" + rpis[i] + "</em></li>";
 				}
 				document.getElementById("rpiRankings").innerHTML = displayString;
 				
+			}
+			
+			// Sets the team to be viewed
+			function set_view_data(id) {
+				localStorage.currentTeam = id;
 			}
 		</script>
 	</body>

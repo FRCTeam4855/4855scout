@@ -6,11 +6,15 @@
 		<script type="text/javascript"></script>
 		<link href="../data/styles.css" rel="stylesheet" type="text/css">
 	</head>
-	<body onload="load_data()">
+	<body onload="">
 		<h1>NEW SCOUTING REPORT</h1>
+		<div class="buttonList" style="margin-bottom: 36px;">
+			<a href="verbal_form.html">Verbal Form</a>
+		</div>
 		<form id="scout" action="" onsubmit="return false">
 			
 			<fieldset>
+				<input type="hidden" id="formtype" name="formtype" value="match">
 				<label for="name">Scouter Name</label><input id="inName" name="name" required><br>
 				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
 				<label for="matchno">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
@@ -18,110 +22,77 @@
 			</fieldset>
 			
 			<fieldset>
-				<label for="sslevel"><strong>Sandstorm</strong> - Level</label>
-				<select name="sslevel" id="inSslevel">
-					<option value="0">Didn't see</option>
-					<option value="1">Level 1</option>
-					<option value="2">Level 2</option>
+				<h3 class="fieldsetHead">Autonomous</h3>
+				<label for="autocross"><strong>Autonomous</strong> - Autocross completion (did they cross the line in auto?)</label>
+				<select name="autocross" id="inAutocross">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
 				</select><br>
-				
-				<label for="ssscoring">Describe scoring capabilities (200 character max):</label><br>
-				<textarea id="inSsscoring" name="ssscoring" rows="4" cols="65" maxlength="200" placeholder="Did they place a hatch? Cargo? How many and where?" required></textarea><br>
+				<label for="autolow"><strong>Autonomous</strong> - Cells in low goal</label>
+				<input name="autolow" id="inAutolow" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+				<label for="autohigh"><strong>Autonomous</strong> - Cells in high goal</label>
+				<input name="autohigh" id="inAutohigh" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
 			</fieldset>
 			
 			<fieldset>
-				<label for="cscargo"><strong>Cargo ship</strong> - Cargo capabilities</label>
-				<select name="cscargo" id="inCscargo" required>
-					<option value="0">Did not attempt</option>
-					<option value="-1">Incapable</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select><br>
-				<label for="cscargoexp">Explain (130 character max):</label><input id="inCscargoexp" name="cscargoexp" placeholder="Robot missed a couple cargo, dropped some on the way to cargo ship..." autocomplete="off" maxlength="130" size="90"><br>
+				<h3 class="fieldsetHead">Teleoperated</h3>
+				<label for="lowport"><strong>Power Port</strong> - Cells in low goal</label>
+				<input name="lowport" id="inLowport" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+
+				<label for="highport"><strong>Power Port</strong> - Cells in high goal</label>
+				<input name="highport" id="inHighport" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
 				
-				<label for="rcargo"><strong>Rocket</strong> - Cargo capabilities</label>
-				<select name="rcargo" id="inRcargo" required>
-					<option value="0">Did not attempt</option>
-					<option value="-1">Incapable</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+				<label for="cp2"><strong>Control Panel</strong> - Activated Stage 2 (rotational control)</label>
+				<select name="cp2" id="inCp2" required>
+					<option value="0">Did not complete</option>
+					<option value="1">Completed</option>
 				</select><br>
-				<label for="rcargoexp">Explain (130 character max):</label><input id="inRcargoexp" name="rcargoexp" placeholder="Couldn't hit level 2 very consistently, intake looks unreliable..." autocomplete="off" maxlength="130" size="90"><br>
 				
-				<label for="cshatch"><strong>Cargo ship</strong> - Hatch capabilities</label>
-				<select name="cshatch" id="inCshatch" required>
-					<option value="0">Did not attempt</option>
-					<option value="-1">Incapable</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+				<label for="cp3"><strong>Control Panel</strong> - Activated Stage 3 (positional control)</label>
+				<select name="cp3" id="inCp3" required>
+					<option value="0">Did not complete</option>
+					<option value="1">Completed</option>
 				</select><br>
-				<label for="cshatchexp">Explain (130 character max):</label><input id="inCshatchexp" name="cshatchexp" placeholder="Very quick, one successful during sandstorm and two successful during tele-op..." autocomplete="off" maxlength="130" size="90"><br>
-				
-				<label for="rhatch"><strong>Rocket</strong> - Hatch capabilities</label>
-				<select name="rhatch" id="inRhatch" required>
-					<option value="0">Did not attempt</option>
-					<option value="-1">Incapable</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select><br>
-				<label for="rhatchexp">Explain (130 character max):</label><input id="inRhatchexp" name="rhatchexp" placeholder="Only attempted once and missed..." autocomplete="off" maxlength="130" size="90"><br>
 			</fieldset>
 			
 			<fieldset>
-				<label for="defense"><strong>Defense</strong> - Capability</label>
+				<h3 class="fieldsetHead">Defense</h3>
+				<label for="defense"><strong>Defense</strong> - Did they attempt defense?</label>
 				<select name="defense" id="inDefense" required>
-					<option value="0">Didn't attempt</option>
+					<option value="0">No</option>
 					<option value="1">Yes</option>
 				</select><br>
 				<label for="defenserate"><strong>Defense</strong> - Rate performance</label>
 				<select name="defenserate" id="inDefenserate" required>
 					<option value="0">Didn't attempt</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+					<option value="1">Poor - Failed to disrupt gameplay</option>
+					<option value="2">Strong - Disrupted opposing scoring efforts</option>
 				</select><br>
-				<label for="defenseexp">Explain (160 character max):</label><input id="inDefenseexp" name="defenseexp" placeholder="Sat against cargo ship, shut down offense on one side of field..." autocomplete="off" maxlength="160" size="90"><br>
+				<label for="defenseexp">Explain (80 character max):</label><input id="inDefenseexp" name="defenseexp" placeholder="Very physical, smashed into robots trying to shoot..." autocomplete="off" maxlength="80" size="90"><br>
 			</fieldset>
 			
 			<fieldset>
-				<label for="climb"><strong>Climb</strong> - Level</label>
+				<h3 class="fieldsetHead">Endgame</h3>
+				<label for="climb"><strong>Climb</strong> - Success</label>
 				<select name="climb" id="inClimb" required>
-					<option value="0">Didn't make it</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
+					<option value="0">None</option>
+					<option value="1">Parked</option>
+					<option value="2">Climbed</option>
 				</select><br>
-				<label for="climbrate"><strong>Climb</strong> - Rate performance</label>
-				<select name="climbrate" id="inClimbrate" required>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+				<label for="climblevel"><strong>Climb</strong> - Able to balance with a partner?</label>
+				<select name="climblevel" id="inClimblevel" required>
+					<option value="0">No</option>
+					<option value="1">Yes</option>
 				</select><br>
-				<label for="climbexp">Explain (130 character max):</label><input id="inClimbexp" name="climbexp" placeholder="Rolled off platform when time hit 0..." autocomplete="off" maxlength="130" size="90"><br>
 			</fieldset>
 			
 			<fieldset>
+				<h3 class="fieldsetHead">Miscellaneous</h3>
 				<input type="checkbox" name="goodpick" id="inGoodpick"><label for="goodpick">This team stands out to me and would be a <u>great pick</u> during alliance selections</label><br>
 				<input type="checkbox" name="penalties" id="inPenalties"><label for="penalties" style="color: #CA0033">I watched this team incur <strong>a great number of penalties</strong> OR incur a <strong>red/yellow card</strong> during this match</label><br>
 				<input type="checkbox" name="breakdown" id="inBreakdown"><label for="breakdown" style="color: #CA0033">I watched this team <strong>tip over, break down, or lose communications</strong> during this match</label><br><br>
 				<label for="comments">Do you have anything else to say about this robot that was not previously described? (300 character max):</label><br>
-				<textarea id="inComments" name="comments" rows="4" cols="85" maxlength="300" placeholder="Seemed pretty tippy, defense was easily able to push it around, mecanum drive train..."></textarea>
+				<textarea id="inComments" name="comments" rows="4" cols="85" maxlength="300" placeholder="Missed a lot of shots, was easily defended by using the rendezvous point as a chokehold..."></textarea>
 			</fieldset>
 			
 			<input type="submit" value="Submit Form">
@@ -130,7 +101,6 @@
 			<a id="cancelButton" href="scouter_main.html">Cancel</a>
 		</div>
 		<script type="text/javascript" src="../script/submit_report.js"></script>
-		<script type="text/javascript" src="../script/explanation_visible.js"></script>
 		<script type="text/javascript" src="../script/get_version.js"></script>
 	</body>
 </html>

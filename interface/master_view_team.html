@@ -11,8 +11,8 @@
 		<h4 id="tbalink"></h4>
 		<div id="rpiInfo">
 			<h3 id="rpi">CALCULATED RPI: </h3>
-			<p id="rpiAdjusts"></p>
-			<small>A team's RPI (Ramageddon Power Index) is used to represent the general quality of a team based on all of its scouting sheets. RPI begins at 200 and is adjusted based on all ratings; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+			<!--<p id="rpiAdjusts"></p>-->
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance.RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
 		</div>
 		<div id="teamReports">
 			
@@ -24,6 +24,7 @@
 		<script type="text/javascript" src="../script/extract_data.js"></script>
 		<script type="text/javascript" src="../script/show_data.js"></script>
 		<script type="text/javascript" src="../script/get_team_name.js"></script>
+		<script type="text/javascript" src="../script/get_match_key.js"></script>
 		<script type="text/javascript" src="../script/calculate_rpi.js"></script>
 		<script>
 			function load_data() {
@@ -54,9 +55,9 @@
 				}
 				
 				// Print out the RPI
-				var powerInfo = calculate_rpi(formArray);
-				document.getElementById("rpi").innerHTML += "<strong>" + powerInfo[0] + "</strong> (" + powerInfo[4] + ")";
-				document.getElementById("rpiAdjusts").innerHTML += "Cargo Adjustment: " + powerInfo[1] + "  ~~  Hatch Adjustment: " + powerInfo[2] + "  ~~  Climb Adjustment: " + powerInfo[3];
+				var powerInfo = calculate_rpi(formArray, true, false, "", false, "");
+				document.getElementById("rpi").innerHTML += "<strong>" + powerInfo[0] + "</strong> (" + powerInfo[1] + ")";
+				//document.getElementById("rpiAdjusts").innerHTML += "Cargo Adjustment: " + powerInfo[1] + "  ~~  Hatch Adjustment: " + powerInfo[2] + "  ~~  Climb Adjustment: " + powerInfo[3];
 				
 			}
 		</script>

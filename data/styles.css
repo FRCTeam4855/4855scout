@@ -74,6 +74,8 @@ a:hover {
 #rpiRankInfo ol {
 	text-align: center;
 	font-size: 110%;
+	padding-left: 0;
+	margin-top: 26px;
 }
 
 /*Display styles for items on a scouter's or a master's data sheet list*/
@@ -85,15 +87,15 @@ a:hover {
 	text-align: center;
 }
 #scoutedList li, #masterTeamList li {
-	padding: 18px;
+	padding: 16px;
 	display: inline-block;
 	border-width: 2px;
 	margin: 6px;
 	border-style: solid;
 	background-color: #D2D2D2;
-	width: 220px;
+	width: 200px;
 	vertical-align: middle;
-	min-height: 140px;
+	min-height: 130px;
 }
 #scoutedList li h2, #masterTeamList h2 {
 	text-align: center;
@@ -191,14 +193,20 @@ a:hover {
 	margin-top: 12px;
 }
 
-/*Display styles for the scouting form element itself*/
+/*Display styles for the scouting form element itself as well as the form to filter RPI rankings*/
 #scout {
 	padding: 12px 24px;
 	margin: 0 8%;
 	background-color: #412561;
 }
-#scout label, #scout input, #scout textarea, #scout select {
-	margin: 8px;
+#rpilist {
+	text-align: center;
+	margin: 16px 0;;
+	width: 100%;
+	border-bottom: 2px solid black;
+}
+#scout label, #scout input, #scout textarea, #scout select, #rpilist label, #rpilist select, #rpilist input {
+	margin: 6px;
 	display: inline;
 }
 #scout input {
@@ -218,7 +226,7 @@ a:hover {
 	border: 2px solid #000;
 	background-color: #D2D2D2;
 }
-#scout input[type="submit"] {
+#scout input[type="submit"], #rpilist input[type="button"]{
 	background-color: #764BA3;
 	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
 	font-size: 125%;
@@ -231,9 +239,14 @@ a:hover {
 	box-shadow: none;
 	margin: 20px auto;
 }
-#scout input[type="submit"]:hover  {
+#scout input[type="submit"]:hover, #rpilist input[type="button"]:hover  {
 	background-color: #9f7cc3;
 	cursor: pointer;
+}
+.fieldsetHead {
+	text-align: center;
+	font-size: 120%;
+	color: #666666;
 }
 
 /* Display styles for the import screen AND the simulate match screen*/
@@ -279,14 +292,19 @@ a:hover {
 	border: 2px solid #000;
 	background-color: #D2D2D2;
 	padding: 10px 10px 30px;
+	color: white;
+}
+#redAllianceForm {
+	background-color: #660000;
+}
+#blueAllianceForm {
+	background-color: #000066;
 }
 .teamSelect {
 	margin: 7px;
-	text-size: 115%;
 }
 #simMatchResults {
-	text-align: center;
-	max-width: 400px;
+	max-width: 900px;
 	padding: 8px;
 	display: none;
 	text-align: center;
@@ -295,4 +313,62 @@ a:hover {
 	margin-top: 32px;
 	margin-left: auto;
 	margin-right: auto;
+}
+#projection {
+	font-size: 130%;
+}
+.simTeamResults {
+	width: 45%;
+	display: inline-block;
+	text-align: center;
+	margin: 8px;
+	border: 2px solid #000;
+	vertical-align: middle;
+	padding: 16px 0;
+}
+#redResults {
+	background-color: #EEAAAA;
+}
+#blueResults {
+	background-color: #AAAAEE;
+}
+.simDataBox {
+	width: 45%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin: 4px;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+}
+.simBreakdownBox {
+	width: -moz-calc(100% - 24px);
+	width: -webkit-calc(100% - 24px);
+	width: -o-calc(100% - 24px);
+	width: calc(100% - 24px);
+	margin: 10px;
+	display: inline-block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 12px 0;
+}
+.simBreakdownBox p {
+	margin: 10px 0;
+}
+.simRPBox {
+	width: 26%;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin: 4px;
+	border: 2px solid #000;
+	border-radius: 8px;
+	background-color: #565656;
+	font-style: italic;
+}
+.simRPBox.complete {
+	background-color: #FFFFFF;
+	font-style: normal;
+	font-weight: bold;
 }

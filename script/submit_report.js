@@ -6,13 +6,14 @@ window.addEventListener('load', function() {
 	// On submit, do stuff
 	form.onsubmit = function(e) {
 		e.preventDefault(); 
-		var name = "", teamno = "", matchno = "", timestamp = "", eventkey = "", formID;
-		var sslevel = "", ssscoring = "";
-		var cscargo = "", cscargoexp = "", rcargo = "", rcargoexp = "";
-		var cshatch = "", cshatchexp = "", rhatch = "", rhatchexp = "";
+		var name = "", teamno = "", matchno = "", timestamp = "", eventkey = "", formtype = "", formID;
+		var autocross = "", autolow = "", autohigh = "";
+		var lowport = "", highport = "", cp2 = "", cp3 = "";
 		var defense = "", defenserate = "", defenseexp = "";
-		var climb = "", climbrate = "", climbexp = "";
+		var climb = "", climblevel = "";
 		var goodpick = "", penalties = "", breakdown = "", comments = "";
+		
+		var drivetrain = "", weight = "", innerport = "";
 		
 		if (localStorage.source != "master") localStorage.init = true;
 
@@ -22,71 +23,97 @@ window.addEventListener('load', function() {
 		} else {
 			localStorage.sheets = 1;
 		}
-
-		// Generate a unique form ID and assign variables to form inputs
+		
+		// Universal information, generation of a unique form ID and the assignment of variables to form inputs
+		formtype = document.getElementById("formtype").value;
 		formID = Math.round(Math.random() * (999999 - 100000) + 100000);
 		name = document.getElementById("inName").value;
 		teamno = document.getElementById("inTeamno").value;
-		matchno = document.getElementById("inMatchno").value;
+		eventkey = document.getElementById("inEventkey").value;
 		var d = new Date();
 		var m = d.getMonth() + 1;
 		timestamp = m.toString() + "-" + d.getDate() + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
-		eventkey = document.getElementById("inEventkey").value;
-		
-		sslevel = document.getElementById("inSslevel").value;
-		ssscoring = document.getElementById("inSsscoring").value;
-		
-		cscargo = document.getElementById("inCscargo").value;
-		cshatch = document.getElementById("inCshatch").value;
-		rcargo = document.getElementById("inRcargo").value;
-		rhatch = document.getElementById("inRhatch").value;
-		cscargoexp = document.getElementById("inCscargoexp").value;
-		cshatchexp = document.getElementById("inCshatchexp").value;
-		rcargoexp = document.getElementById("inRcargoexp").value;
-		rhatchexp = document.getElementById("inRhatchexp").value;
-		
-		defense = document.getElementById("inDefense").value;
-		defenserate = document.getElementById("inDefenserate").value;
-		defenseexp = document.getElementById("inDefenseexp").value;
-		
-		climb = document.getElementById("inClimb").value;
-		climbrate = document.getElementById("inClimbrate").value;
-		climbexp = document.getElementById("inClimbexp").value;
-		
-		goodpick = document.getElementById("inGoodpick").checked.toString();
-		penalties = document.getElementById("inPenalties").checked.toString();
-		breakdown = document.getElementById("inBreakdown").checked.toString();
 		comments = document.getElementById("inComments").value;
+		var formObj;
+		
+		if (formtype == "verbal") {
+			// Verbal form values
+			drivetrain = document.getElementById("inDrivetrain").value;
+			weight = document.getElementById("inWeight").value;
+			innerport = document.getElementById("inInnerport").value;
+			defense = document.getElementById("inDefense").value;
+			cp2 = document.getElementById("inCp2").value;
+			cp3 = document.getElementById("inCp3").value;
+			
+			// Convert form inputs into an object
+			formObj = {
+				"formID": formID, 
+				"name": name, 
+				"teamno": teamno, 
+				"formtype": formtype,
+				"timestamp": timestamp,
+				"eventkey": eventkey,
+				"drivetrain": drivetrain,
+				"weight": weight,
+				"innerport": innerport,
+				"defense": defense,
+				"cp2": cp2,
+				"cp3": cp3,
+				"comments": comments
+			};
+		} else {
+			// Match form values
+			matchno = document.getElementById("inMatchno").value;
 
-		// Convert form inputs into an object
-		var formObj = {
-			"formID": formID, 
-			"name": name, 
-			"teamno": teamno, 
-			"matchno": matchno,
-			"timestamp": timestamp,
-			"eventkey": eventkey,
-			"sslevel": sslevel,
-			"ssscoring": ssscoring,
-			"cscargo": cscargo,
-			"rcargo": rcargo,
-			"cshatch": cshatch,
-			"rhatch": rhatch,
-			"cscargoexp": cscargoexp,
-			"rcargoexp": rcargoexp,
-			"cshatchexp": cshatchexp,
-			"rhatchexp": rhatchexp,
-			"defense": defense,
-			"defenserate": defenserate,
-			"defenseexp": defenseexp,
-			"climb": climb,
-			"climbrate": climbrate,
-			"climbexp": climbexp,
-			"goodpick": goodpick,
-			"penalties": penalties,
-			"breakdown": breakdown,
-			"comments": comments
-		};
+			autocross = document.getElementById("inAutocross").value;
+			autolow = document.getElementById("inAutolow").value;
+			autohigh = document.getElementById("inAutohigh").value;
+
+			lowport = document.getElementById("inLowport").value;
+			highport = document.getElementById("inHighport").value;
+			cp2 = document.getElementById("inCp2").value;
+			cp3 = document.getElementById("inCp3").value;
+
+			defense = document.getElementById("inDefense").value;
+			defenserate = document.getElementById("inDefenserate").value;
+			defenseexp = document.getElementById("inDefenseexp").value;
+
+			climb = document.getElementById("inClimb").value;
+			climblevel = document.getElementById("inClimblevel").value;
+
+			goodpick = document.getElementById("inGoodpick").checked.toString();
+			penalties = document.getElementById("inPenalties").checked.toString();
+			breakdown = document.getElementById("inBreakdown").checked.toString();
+
+			// Convert form inputs into an object
+			formObj = {
+				"formID": formID, 
+				"name": name, 
+				"teamno": teamno, 
+				"matchno": matchno,
+				"formtype": formtype,
+				"timestamp": timestamp,
+				"eventkey": eventkey,
+				"autocross": autocross,
+				"autolow": autolow,
+				"autohigh": autohigh,
+				"lowport": lowport,
+				"highport": highport,
+				"cp2": cp2,
+				"cp3": cp3,
+				"defense": defense,
+				"defenserate": defenserate,
+				"defenseexp": defenseexp,
+				"climb": climb,
+				"climblevel": climblevel,
+				"goodpick": goodpick,
+				"penalties": penalties,
+				"breakdown": breakdown,
+				"comments": comments
+			};
+		}
+		
+		// File processing
 		var formJSON = JSON.stringify(formObj);
 		localStorage.setItem("form-" + teamno + "-" + formID.toString(), formJSON);
 

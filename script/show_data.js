@@ -5,6 +5,7 @@
 function form_print_data(form, element) {
 	var name = form.name;
 	var formID = form.formID;
+	var formtype = form.formtype;
 	var teamno = form.teamno;
 	var matchno = form.matchno;
 	var teamname = get_team_name(teamno);
@@ -17,51 +18,102 @@ function form_print_data(form, element) {
 	displayString += "<h3>" + teamname + "</h3>";
 	displayString += '<ul class = "qualityList"><li>Scouter Name: ' + name + '</li>';
 	displayString += "<li>Form ID: form-" + teamno + "-" + formID + "</li>";
-	displayString += "<li>Collected during match #" + matchno + " at event: " + form.eventkey + "</li>";
+	if (formtype == "match") {
+		displayString += "<li>Collected during match #" + matchno + " at event: " + form.eventkey + "</li>";
+	} else {
+		displayString += "<li>Collected at event: " + form.eventkey + "</li>";
+	}
 	displayString += "<li>Timestamp: " + form.timestamp + "</li></ul>";
 	
-	// Sandstorm
-	displayString += '<ul class = "qualityList"><li class="rate">Sandstorm Level: <strong>' + form.sslevel + '</strong></li>';
-	displayString += '<li><i>"' + form.ssscoring + '"</i></li><br class="breaksmall"/>';
-	
-	// Cargo ship, rocket ship stuff
-	displayString += '<li class="rate">Cargo Ship - Cargo Rating: <strong>' + form.cscargo + '</strong></li>';
-	if (form.cscargo != "0" && form.cscargo != "-1") displayString += '<li><i>"' + form.cscargoexp + '"</i></li><br class="breaksmall"/>'; else displayString += '</li><br class="breaksmall"/>';
-	
-	displayString += '<li class="rate">Rocket - Cargo Rating: <strong>' + form.rcargo + '</strong></li>';
-	if (form.rcargo != "0" && form.rcargo != "-1") displayString += '<li><i>"' + form.rcargoexp + '"</i></li><br class="breaksmall"/>'; else displayString += '</li><br class="breaksmall"/>';
-	
-	displayString += '<li class="rate">Cargo Ship - Hatch Rating: <strong>' + form.cshatch + '</strong></li>';
-	if (form.cshatch != "0" && form.cshatch != "-1") displayString += '<li><i>"' + form.cshatchexp + '"</i></li><br class="breaksmall"/>'; else displayString += '</li><br class="breaksmall"/>';
-	
-	displayString += '<li class="rate">Rocket - Hatch Rating: <strong>' + form.rhatch + '</strong></li>';
-	if (form.rhatch != "0" && form.rhatch != "-1") displayString += '<li><i>"' + form.rhatchexp + '"</i></li></ul>'; else displayString += '</li></ul>';
-	
-	// Defensive ability
-	displayString += '<ul class = "qualityList"><li class="rate">Defense: <strong>' + form.defense + '</strong></li>';
-	if (form.defense != "0") {
-		displayString += '<li><strong>Rating: ' + form.defenserate + '</strong></li>';
-		displayString += '<li><i>"' + form.defenseexp + '"</i></li></ul>';
-	} else displayString +="</ul>"
-	
-	displayString += '<ul class = "qualityList"><li class="rate">Climb Level: <strong>' + form.climb + '</strong></li>';
-	displayString += '<li><strong>Rating: ' + form.climbrate + '</strong></li>';
-	displayString += '<li><i>"' + form.climbexp + '"</i></li></ul>';
-	
-	if (form.comments != "") displayString += '<p>Comments: <i>"' + form.comments + '"</i></p>'
-	
-	// Checkmarks
-	displayString += '<ul class = "qualityList">';
-	if (form.goodpick == "true") {
-		displayString += 'This team was identified as a good team to choose during selections.<br>';
-	} else displayString += 'This team was <i>not</i> identified as a good team to choose during selections.<br>';
-	if (form.penalties == "true") {
-		displayString += '<span style="color: #CA0033">This team was identified as incurring great penalties OR a yellow/red card during this match.</span><br>';
+	// Autonomous
+	if (formtype == "match") {
+		displayString += '<ul class = "qualityList"><li class="rate">Total RPI</li><li>Est. Point Contribution: <strong>' + calculate_rpi([form], true, false, "", true, get_match_key(form.eventkey, matchno)) + '</strong></li></ul>';
+		
+		let autocross;
+		if (form.autocross == "1") autocross = "Yes"; else autocross = "No";
+		displayString += '<ul class = "qualityList"><li class="rate">Autonomous Scoring</li><li>Autocross?: <strong>' + autocross + '</strong></li>';
+		displayString += '<li>Auto - Low Goal: <strong>' + form.autolow + '</strong></li>';
+		displayString += '<li>Auto - High Goal: <strong>' + form.autohigh + '</strong></li><br class="breaksmall"/>';
+
+		// Power Port, Control Panel scoring
+		displayString += '<li class="rate">Teleop Scoring</li><li>Power Port - Low Goal: <strong>' + form.lowport + '</strong></li>';
+		displayString += '<li>Power Port - High Goal: <strong>' + form.highport + '</strong></li>';
+
+		let cp2, cp3;
+		if (form.cp2 == "1") cp2 = "Yes"; else cp2 = "No";
+		if (form.cp3 == "1") cp3 = "Yes"; else cp3 = "No";
+		displayString += '<li>Control Panel - Stg. 2 Activation: <strong>' + cp2 + '</strong></li>';
+
+		displayString += '<li>Control Panel - Stg. 3 Activation: <strong>' + cp3 + '</strong></li></ul>';
+
+		// Defensive ability
+		displayString += '<ul class = "qualityList"><li class="rate">Defensive Effort</li>';
+		if (form.defense == "1") {
+			switch (form.defenserate) {
+				case "0":
+					displayString += '<li>Team ' + teamno + ' attempted defense during the match.</li>';
+					break;
+				case "1":
+					displayString += '<li>Team ' + teamno + ' attempted defense during the match & received a <strong>poor</strong> rating.</li>';
+					break;
+				case "2":
+					displayString += '<li>Team ' + teamno + ' attempted defense during the match & received a <strong>strong</strong> rating.</li>';
+					break;
+			}
+			if (form.defenseexp != "") displayString += '<li><i>"' + form.defenseexp + '"</i></li>';
+			displayString += '</ul>';
+		} else displayString += "<li>Team " + teamno + " did not attempt defense during this match.</li></ul>"
+
+		// Climb and comments
+		let climb = "No park";
+		if (form.climb == "1") climb = "Parked"; else if (form.climb == "2") climb = "Climbed";
+		displayString += '<ul class = "qualityList"><li class="rate">Climb Performance</li><li>Climb Outcome: <strong>' + climb + '</strong></li>';
+		let climblevel = "No";
+		if (form.climblevel == "1") climblevel = "Yes";
+		displayString += '<li>Leveled with a partner?: <strong>' + climblevel + '</strong></li></ul>';
+
+		if (form.comments != "") displayString += '<p>Comments: <i>"' + form.comments + '"</i></p>';
+
+		// Checkmarks
+		displayString += '<ul class = "qualityList">';
+		if (form.goodpick == "true") {
+			displayString += 'This team was identified as a good team to choose during selections.<br>';
+		}
+		if (form.penalties == "true") {
+			displayString += '<span style="color: #CA0033">This team was identified as incurring great penalties OR a yellow/red card during this match.</span><br>';
+		}
+		if (form.breakdown == "true") {
+			displayString += '<span style="color: #CA0033">This team broke down, tipped over, or lost communications during this match.</span>';
+		}
+		displayString += '</ul>';
+	} else {
+		// Verbal form printing
+		// Just list everything the team had to say
+		displayString += '<ul class="qualityList"><li class="rate">Attributes</li><li>Drivetrain: <strong>' + form.drivetrain + '</strong></li>';
+		displayString += '<li>Robot Weight: <strong>' + form.weight + ' lbs</strong></li>';
+		if (form.innerport == "0") {
+			displayString += '<li>Team ' + teamno + ' indicated that they are <strong>inconsistent</strong> when attempting to hit the inner port.</li>';
+		} else displayString += '<li>Team ' + teamno + ' indicated that they <strong>frequently hit</strong> the inner port when shooting.</li>';
+		switch (form.defense) {
+			case "0":
+				displayString += '<li>Defensive ability: <strong>Complete incapability</strong></li>';
+				break;
+			case "1":
+				displayString += '<li>Defensive ability: <strong>Would rather not</strong></li>';
+				break;
+			case "2":
+				displayString += '<li>Defensive ability: <strong>Able and willing</strong></li>';
+				break;
+		}
+		let cp2, cp3;
+		if (form.cp2 == "1") cp2 = "Able"; else cp2 = "Unable";
+		if (form.cp3 == "1") cp3 = "Able"; else cp3 = "Unable";
+		displayString += '<li>Control Panel - Stg. 2 Activation: <strong>' + cp2 + '</strong></li>';
+
+		displayString += '<li>Control Panel - Stg. 3 Activation: <strong>' + cp3 + '</strong></li></ul>';
+		displayString += '</ul>';
+		if (form.comments != "") displayString += '<p>Comments: <i>"' + form.comments + '"</i></p>';
 	}
-	if (form.breakdown == "true") {
-		displayString += '<span style="color: #CA0033">This team broke down, tipped over, or lost communications during this match.</span>';
-	}
-	displayString += '</ul>';
 	
 	// Delete form link
 	displayString += '<a href="#" onclick="delete_form(' + formID + ')">Delete this form</a>';
