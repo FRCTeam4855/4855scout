@@ -384,7 +384,7 @@
 						autolow += Number(forms[i].autolow);
 						autohigh += Number(forms[i].autohigh);
 					}
-					if (autocross > 3.6) autocross = 5; else autocross = 0;
+					if ((autocross * 5) / allForms > 3.6) autocross = 5; else autocross = 0;
 					autolow = Math.round(autolow / allForms);
 					autohigh = Math.round(autohigh / allForms);
 					return [autocross + autolow * 2 + autohigh * 4, autolow + autohigh];
