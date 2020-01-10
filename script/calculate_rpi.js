@@ -6,7 +6,7 @@ function calculate_rpi(forms, factorPenalties, generateByEventKey, eventKey, gen
 
 	var rpi = 0;
 	var formCount = 0;
-	var rateOfInnerPortHits = .25;	// the true value here will reveal itself midseason, but as we do not poll for inner port hits, we have to estimate
+	var rateOfInnerPortHits = .25;	// the true value here will reveal itself midseason, so we have to estimate
 	
 	// Calculate average autocross points per game
 	var autocrossPts = 0, autolowPts = 0, autohighPts = 0;
@@ -81,7 +81,10 @@ function calculate_rpi(forms, factorPenalties, generateByEventKey, eventKey, gen
 		rpiQuality = "Excellent";
 	else rpiQuality = "Godly";
 	
-	if (rpi !== rpi) rpi = -999;
+	if (rpi !== rpi) {
+		rpi = -999;
+		rpiQuality = "N/A";
+	}
 	
 	return [rpi, rpiQuality];
 }

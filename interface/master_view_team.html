@@ -12,7 +12,7 @@
 		<div id="rpiInfo">
 			<h3 id="rpi">CALCULATED RPI: </h3>
 			<!--<p id="rpiAdjusts"></p>-->
-			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance.RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
+			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance. RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
 		</div>
 		<div id="teamReports">
 			
@@ -56,8 +56,8 @@
 				
 				// Print out the RPI
 				var powerInfo = calculate_rpi(formArray, true, false, "", false, "");
+				if (powerInfo[0] == -999) powerInfo[0] = 0;
 				document.getElementById("rpi").innerHTML += "<strong>" + powerInfo[0] + "</strong> (" + powerInfo[1] + ")";
-				//document.getElementById("rpiAdjusts").innerHTML += "Cargo Adjustment: " + powerInfo[1] + "  ~~  Hatch Adjustment: " + powerInfo[2] + "  ~~  Climb Adjustment: " + powerInfo[3];
 				
 			}
 		</script>

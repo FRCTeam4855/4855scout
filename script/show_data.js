@@ -106,8 +106,8 @@ function form_print_data(form, element) {
 				break;
 		}
 		let cp2, cp3;
-		if (form.cp2 == "1") cp2 = "Able"; else cp2 = "Unable";
-		if (form.cp3 == "1") cp3 = "Able"; else cp3 = "Unable";
+		if (form.cp2 == "true") cp2 = "Able"; else cp2 = "Unable";
+		if (form.cp3 == "true") cp3 = "Able"; else cp3 = "Unable";
 		displayString += '<li>Control Panel - Stg. 2 Activation: <strong>' + cp2 + '</strong></li>';
 
 		displayString += '<li>Control Panel - Stg. 3 Activation: <strong>' + cp3 + '</strong></li></ul>';

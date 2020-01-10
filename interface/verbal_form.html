@@ -6,7 +6,7 @@
 		<script type="text/javascript"></script>
 		<link href="../data/styles.css" rel="stylesheet" type="text/css">
 	</head>
-	<body onload="load_data()">
+	<body onload="pick_button()">
 		<h1>NEW VERBAL REPORT</h1>
 		<div class="buttonList" style="margin-bottom: 36px;">
 			<a href="scout_form.html">Match Form</a>
@@ -65,5 +65,10 @@
 		</div>
 		<script type="text/javascript" src="../script/submit_report.js"></script>
 		<script type="text/javascript" src="../script/get_version.js"></script>
+		<script>
+			function pick_button() {
+				if (localStorage.masterInit) document.getElementById("cancelButton").href = "master_main.html";
+			}
+		</script>
 	</body>
 </html>

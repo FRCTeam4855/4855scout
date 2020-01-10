@@ -372,3 +372,11 @@ a:hover {
 	font-style: normal;
 	font-weight: bold;
 }
+#simTeamAttributes {
+	margin: 10px;
+	display: block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 12px 0;
+}

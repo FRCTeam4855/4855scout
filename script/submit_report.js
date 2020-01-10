@@ -42,8 +42,8 @@ window.addEventListener('load', function() {
 			weight = document.getElementById("inWeight").value;
 			innerport = document.getElementById("inInnerport").value;
 			defense = document.getElementById("inDefense").value;
-			cp2 = document.getElementById("inCp2").value;
-			cp3 = document.getElementById("inCp3").value;
+			cp2 = document.getElementById("inCp2").checked.toString();
+			cp3 = document.getElementById("inCp3").checked.toString();
 			
 			// Convert form inputs into an object
 			formObj = {
