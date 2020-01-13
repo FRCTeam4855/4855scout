@@ -12,6 +12,7 @@ function simulate_match() {
 		localStorage.simActiveRed = "";
 		localStorage.simActiveBlue = "";
 		localStorage.simActiveData = "";
+		simDisplayTeam("red", 0);	// refresh individual team data
 		
 		// Grab team numbers
 		var teamnoR1 = document.getElementById("redTeam1").value;
@@ -25,10 +26,10 @@ function simulate_match() {
 		// Define team statistics in objects
 		var redScore = 0, blueScore = 0;
 		var redAuto = 0, blueAuto = 0;
-		var redAutoCellsScored = 0, blueAutoCellsScored = 0;
 		var redStageCapacity = 0, blueStageCapacity = 0;
 		var redPower = 0, bluePower = 0;
 		var redPanel = 0, bluePanel = 0;
+		var redDefensivePrevention = 0, blueDefensivePrevention = 0;
 		var redEndgame = 0, blueEndgame = 0;
 		var redBalanced = false, blueBalanced = false;
 		var redRP = [false, false, false], blueRP = [false, false, false];
@@ -42,7 +43,8 @@ function simulate_match() {
 				cp: get_stat(teamnoR1, "cp"),
 				endgame: get_stat(teamnoR1, "endgame"),
 				defense: get_stat(teamnoR1, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			},
 			{
 				teamno: teamnoR2,
@@ -52,7 +54,8 @@ function simulate_match() {
 				cp: get_stat(teamnoR2, "cp"),
 				endgame: get_stat(teamnoR2, "endgame"),
 				defense: get_stat(teamnoR2, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			},
 			{
 				teamno: teamnoR3,
@@ -62,7 +65,8 @@ function simulate_match() {
 				cp: get_stat(teamnoR3, "cp"),
 				endgame: get_stat(teamnoR3, "endgame"),
 				defense: get_stat(teamnoR3, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			}
 		];
 		var blue = [
@@ -74,7 +78,8 @@ function simulate_match() {
 				cp: get_stat(teamnoB1, "cp"),
 				endgame: get_stat(teamnoB1, "endgame"),
 				defense: get_stat(teamnoB1, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			},
 			{
 				teamno: teamnoB2,
@@ -84,7 +89,8 @@ function simulate_match() {
 				cp: get_stat(teamnoB2, "cp"),
 				endgame: get_stat(teamnoB2, "endgame"),
 				defense: get_stat(teamnoB2, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			},
 			{
 				teamno: teamnoB3,
@@ -94,7 +100,8 @@ function simulate_match() {
 				cp: get_stat(teamnoB3, "cp"),
 				endgame: get_stat(teamnoB3, "endgame"),
 				defense: get_stat(teamnoB3, "defense"),
-				likelyDefending: false
+				likelyDefending: false,
+				likelyDefended: false
 			}
 		];
 
@@ -107,37 +114,139 @@ function simulate_match() {
 
 		// BZZZZT... DING DING DINGGGG
 		// Run teleop simulation and modify team's outputs based on defense
-		// Defensive bots will be targeting robots with higher RPIs. Bots with wills of .8 or higher will always play defense
-		if (playDefense) {
-			// TODO program defense
-		} else {
-			// Simulate red scoring
-			redPower = red[0].powerport[0] + red[1].powerport[0] + red[2].powerport[0];
-			redStageCapacity = red[0].powerport[1] + red[1].powerport[1] + red[2].powerport[1];
-			let cp2 = false, cp3 = false;
-			for (var i = 0; i < red.length; i ++) {
-				if (red[i].cp[0]) cp2 = true;
-				if (red[i].cp[1]) cp3 = true;
-			}
-			if (redStageCapacity >= 29) redPanel = 10;
-			if (redStageCapacity >= 49) {
-				redPanel = 30;
-				redRP[2] = true;
-			}
+		// Defensive bots will be targeting robots with higher teleop outputs. Bots with wills of .71 or higher will always play defense unless one of their partners has a greater will/strength
+		
+		// Choose teams that are most likely to be defended against during teleop
+		var redDefender = -1, redTarget = -1;
+		var blueDefender = -1, blueTarget = -1;
 
-			// Simulate blue scoring
-			bluePower = blue[0].powerport[0] + blue[1].powerport[0] + blue[2].powerport[0];
-			blueStageCapacity = blue[0].powerport[1] + blue[1].powerport[1] + blue[2].powerport[1];
-			cp2 = false; cp3 = false;
+		// Red alliance: choose the team that will likely see defense played on them during this match, will be the highest cell scorer
+		var pchigh = 0, pcindex = -1;
+		for (i = 0; i < red.length; i ++) {
+			if (red[i].powerport[0] > pchigh) {
+				pchigh = red[i].powerport[0];
+				pcindex = i;
+			}
+		}
+		red[pcindex].likelyDefended = true;
+		redTarget = pcindex;
+		
+		// Blue alliance: choose the team that will likely see defense played on them during this match, will be the highest cell scorer
+		pchigh = 0, pcindex = -1;
+		for (i = 0; i < blue.length; i ++) {
+			if (blue[i].powerport[0] > pchigh) {
+				pchigh = blue[i].powerport[0];
+				pcindex = i;
+			}
+		}
+		blue[pcindex].likelyDefended = true;
+		blueTarget = pcindex;
+		
+		// Choose the likely defenders. If no teams are on defense, simulate the match as normal
+		if (playDefense) {
+			// Choose the red alliance defender
+			var dwhigh = 0, dwindex = -1;			// most likely defender
+			var dwhigh2 = 0, dwindex2 = -1;			// the second most likely defender
+			for (i = 0; i < red.length; i ++) {
+				if (red[i].defense[1] > dwhigh) {
+					dwhigh2 = dwhigh;
+					dwindex2 = dwindex;
+					dwhigh = red[i].defense[1];
+					dwindex = i;
+				}
+			}
+			// If the likely defender is a particularly good scorer, make the second most likely defender do it (will of .7 or more)
+			var def = -1;
+			if (dwhigh > .71 && red[dwindex].powerport[1] < 20) {
+				def = red[dwindex];
+				redDefender = dwindex;
+			} else if (dwhigh2 > .7) {
+				def = red[dwindex2];
+				redDefender = dwindex2;
+			}
+			if (def != -1) {
+				def.likelyDefending = true;
+				def.powerport[1] = Math.max(def.powerport[1] - 4, 0);		// reduce score because team will be defending instead of playing offense
+				def.powerport[0] = Math.max(def.powerport[0] - 6, 0);
+				if (def.powerport[1] > 0 && def.powerport[0] == 0) def.powerport[0] = 1;
+			}
+			
+			// Choose the blue alliance defender
+			dwhigh = 0, dwindex = -1;			// most likely defender
+			dwhigh2 = 0, dwindex2 = -1;			// the second most likely defender
 			for (i = 0; i < blue.length; i ++) {
-				if (blue[i].cp[0]) cp2 = true;
-				if (blue[i].cp[1]) cp3 = true;
+				if (blue[i].defense[1] > dwhigh) {
+					dwhigh2 = dwhigh;
+					dwindex2 = dwindex;
+					dwhigh = blue[i].defense[1];
+					dwindex = i;
+				}
 			}
-			if (blueStageCapacity >= 29) bluePanel = 10;
-			if (blueStageCapacity >= 49) {
-				bluePanel = 30;
-				blueRP[2] = true;
+			// If the likely defender is a particularly good scorer, make the second most likely defender do it (will of .7 or more)
+			def = -1;
+			if (dwhigh > .71 && blue[dwindex].powerport[1] < 20) {
+				def = blue[dwindex];
+				blueDefender = dwindex;
+			} else if (dwhigh2 > .7) {
+				def = blue[dwindex2];
+				blueDefender = dwindex2;
 			}
+			if (def != -1) {
+				def.likelyDefending = true;
+				def.powerport[1] = Math.max(def.powerport[1] - 4, 0);		// reduce score because team will be defending instead of playing offense
+				def.powerport[0] = Math.max(def.powerport[0] - 6, 0);
+				if (def.powerport[1] > 0 && def.powerport[0] == 0) def.powerport[0] = 1;
+			}
+			
+			// Simulate defense: Red on blue
+			console.log(redDefender);
+			if (redDefender != -1) {
+				redDefensivePrevention = red[redDefender].defense[0];
+				let blueOriginalScore = blue[blueTarget].powerport[0];
+				if (redDefensivePrevention > blue[blueTarget].powerport[1]) redDefensivePrevention = blue[blueTarget].powerport[1];
+				blue[blueTarget].powerport[1] -= redDefensivePrevention;
+				blue[blueTarget].powerport[0] = Math.round(blue[blueTarget].powerport[1] + blue[blueTarget].powerport[1] * blue[blueTarget].powerport[2]);	// recalculate power port score
+				redDefensivePrevention = blueOriginalScore - blue[blueTarget].powerport[0];	// calculate defensive score impact
+			}
+			
+			// Simulate defense: Blue on red
+			console.log(blueDefender);
+			if (blueDefender != -1) {
+				blueDefensivePrevention = blue[blueDefender].defense[0];
+				let redOriginalScore = red[redTarget].powerport[0];
+				if (blueDefensivePrevention > red[redTarget].powerport[1]) blueDefensivePrevention = red[redTarget].powerport[1];
+				red[redTarget].powerport[1] -= blueDefensivePrevention;
+				red[redTarget].powerport[0] = Math.round(red[redTarget].powerport[1] + red[redTarget].powerport[1] * red[redTarget].powerport[2]);	// recalculate power port score
+				blueDefensivePrevention = redOriginalScore - red[redTarget].powerport[0];	// calculate defensive score impact
+			}
+		}
+				
+		// Simulate red scoring
+		redPower = red[0].powerport[0] + red[1].powerport[0] + red[2].powerport[0];
+		redStageCapacity = red[0].powerport[1] + red[1].powerport[1] + red[2].powerport[1];
+		let cp2 = false, cp3 = false;
+		for (var i = 0; i < red.length; i ++) {
+			if (red[i].cp[0]) cp2 = true;
+			if (red[i].cp[1]) cp3 = true;
+		}
+		if (redStageCapacity >= 29) redPanel = 10;
+		if (redStageCapacity >= 49) {
+			redPanel = 30;
+			redRP[2] = true;
+		}
+
+		// Simulate blue scoring
+		bluePower = blue[0].powerport[0] + blue[1].powerport[0] + blue[2].powerport[0];
+		blueStageCapacity = blue[0].powerport[1] + blue[1].powerport[1] + blue[2].powerport[1];
+		cp2 = false; cp3 = false;
+		for (i = 0; i < blue.length; i ++) {
+			if (blue[i].cp[0]) cp2 = true;
+			if (blue[i].cp[1]) cp3 = true;
+		}
+		if (blueStageCapacity >= 29) bluePanel = 10;
+		if (blueStageCapacity >= 49) {
+			bluePanel = 30;
+			blueRP[2] = true;
 		}
 
 		// Simulate endgame scoring
@@ -157,7 +266,7 @@ function simulate_match() {
 			for (i = 0; i < red.length; i ++) {
 				if (red[i].endgame[0] == "Hanging" && !red[i].endgame[1]) {
 					redEndgame += 5;
-					red[i].endgame[0] == "Parked";
+					red[i].endgame[0] = "Parked";
 				} else if (red[i].endgame[0] == "Hanging" && red[i].endgame[1]) {
 					redEndgame += 25;
 				}
@@ -183,7 +292,7 @@ function simulate_match() {
 			for (i = 0; i < blue.length; i ++) {
 				if (blue[i].endgame[0] == "Hanging" && !blue[i].endgame[1]) {
 					blueEndgame += 5;
-					blue[i].endgame[0] == "Parked";
+					blue[i].endgame[0] = "Parked";
 				} else if (blue[i].endgame[0] == "Hanging" && blue[i].endgame[1]) {
 					blueEndgame += 25;
 				}
@@ -209,15 +318,28 @@ function simulate_match() {
 				if (i == 0) blueAllRP ++;
 			}
 		}
+		if (blueScore == redScore) {
+			// Score is tied, just give each team a tie RP
+			blueAllRP --;	// by default the simulator gives blue the win in a tie, undo this
+			redAllRP ++;	// credit red with the tie RP
+			redRP[0] = true;
+			var rpBoxes = document.getElementsByClassName("simRPBox");
+			rpBoxes[0].innerHTML = "Tie";
+			rpBoxes[3].innerHTML = "Tie";
+		} else {
+			var rpBoxes = document.getElementsByClassName("simRPBox");
+			rpBoxes[0].innerHTML = "Win";
+			rpBoxes[3].innerHTML = "Win";
+		}
 
 		// Assemble display, starting with projection
 		var disp = document.getElementById("projection");
 		disp.innerHTML = "";
 		document.getElementById("simMatchResults").style.display = "block";
 		var dispString = ""
-		if (redScore - 3 > blueScore)
+		if (redScore - 4 > blueScore)
 			dispString = "<h2>RED ALLIANCE PROJECTED TO WIN</h2>";
-		else if (blueScore - 3 > redScore)
+		else if (blueScore - 4 > redScore)
 			dispString = "<h2>BLUE ALLIANCE PROJECTED TO WIN</h2>";
 		else dispString = "<h2>MATCH IS A TOSSUP</h2>";
 		disp.innerHTML = dispString;
@@ -269,6 +391,67 @@ function simulate_match() {
 		ds += "<p>Control Panel: " + bluePanel + "</p>";
 		ds += "<p>Endgame: " + blueEndgame + "</p>";
 		document.getElementById("simBlueBreakdown").innerHTML = ds;
+		
+		// Generate turning point statistics
+		// Red turning points
+		var mainDiff = Math.abs(redScore - blueScore);
+		var redTurningPoint1 = "-", redTurningPoint2 = "-";
+		var turningPointStrings = ["<strong>Autonomous</strong>: The outcome of the match may be largely determined by the quality of your autonomous routines", "<strong>Power Cells</strong>: Every shot counts; shoot high and accurately to gain the edge", "<strong>Control Panel</strong>: Don't overlook this element; be sure to score enough power cells to reach capacity and spin the wheel", "<strong>Climbing</strong>: The endgame will likely turn the tides of the match, so climb well", "<strong>Strong Defense</strong>: Play defense well and nullify the opposing scoring core during teleop to reap benefit", "<strong>Resist the Defense</strong>: The opposing defense is strong, don't let it get in the way of scoring"];
+		var redDiff = [mainDiff - redAuto, mainDiff - redPower, mainDiff - redPanel, mainDiff - redEndgame + 15, mainDiff - redDefensivePrevention, mainDiff - blueDefensivePrevention];
+		var lgi = -1, lg = 1;
+		var lgi2 = -1, lg2 = 1;
+		redDiff.forEach(function(val, ind) {
+			if (val <= 0 && val < lgi) {
+				lgi2 = lgi;
+				lg2 = lg;
+				lgi = ind;
+				lg = val;
+			}
+		});
+		if (lgi != -1) redTurningPoint1 = turningPointStrings[lgi];
+		if (lgi2 != -1) redTurningPoint2 = turningPointStrings[lgi2];
+		
+		var blueTurningPoint1 = "-", blueTurningPoint2 = "-";
+		var blueDiff = [mainDiff - blueAuto, mainDiff - bluePower, mainDiff - bluePanel, mainDiff - blueEndgame + 15, mainDiff - blueDefensivePrevention, mainDiff - redDefensivePrevention];
+		lgi = -1, lg = 1;
+		lgi2 = -1, lg2 = 1;
+		blueDiff.forEach(function(val, ind) {
+			if (val <= 0 && val < lgi) {
+				lgi2 = lgi;
+				lg2 = lg;
+				lgi = ind;
+				lg = val;
+			}
+		});
+		if (lgi != -1) blueTurningPoint1 = turningPointStrings[lgi];
+		if (lgi2 != -1) blueTurningPoint2 = turningPointStrings[lgi2];
+		
+		// Fill in with secure data
+		if (redTurningPoint1 == "-" && redScore > blueScore) redTurningPoint1 = "Outcome is expected to be decisive. Play your game and you'll win handily";
+		if (blueTurningPoint1 == "-" && blueScore > redScore) blueTurningPoint1 = "Outcome is expected to be decisive. Play your game and you'll win handily";
+		if (redScore - 180 > blueScore) blueTurningPoint1 = "<strong>Prayers</strong>: Match is expected to be hopelessly lopsided. Maybe their robots will all break down? Simultaneously?";
+		if (blueScore - 180 > redScore) redTurningPoint1 = "<strong>Prayers</strong>: Match is expected to be hopelessly lopsided. Maybe their robots will all break down? Simultaneously?";
+		
+		// Populate game data table with information
+		var dataTable = document.getElementById("simGameTable");
+		var redD = "-", blueD = "-";
+		if (redDefender != -1) redD = red[redDefender].teamno;
+		if (blueDefender != -1) blueD = blue[blueDefender].teamno;
+		var averageRedRPI = Math.round(((red[0].rpi[0] + red[1].rpi[0] + red[2].rpi[0]) * 10) / 3) / 10;
+		var averageBlueRPI = Math.round(((blue[0].rpi[0] + blue[1].rpi[0] + blue[2].rpi[0]) * 10) / 3) / 10;
+		dataTable.innerHTML = "<tr><td style='width: 150px'>" + averageRedRPI + "</td><td style='min-width: 200px;'><strong>Average RPI</strong></td><td style='width: 150px;'>" + averageBlueRPI + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + redD + "</td><td><strong>Likely Defender</strong></td><td>" + blueD + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + red[redTarget].teamno + "</td><td><strong>Strongest Power Cell Team</strong></td><td>" + blue[blueTarget].teamno + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + redDefensivePrevention + "</td><td><strong>Defensive Score Prevention</strong></td><td>" + blueDefensivePrevention + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + red[0].endgame[0] + "</td><td><strong>Robot 1 Endgame</strong></td><td>" + blue[0].endgame[0] + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + red[1].endgame[0] + "</td><td><strong>Robot 2 Endgame</strong></td><td>" + blue[1].endgame[0] + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + red[2].endgame[0] + "</td><td><strong>Robot 3 Endgame</strong></td><td>" + blue[2].endgame[0] + "</td></tr>";
+		var redb = "No", blueb = "No";
+		if (redBalanced) redb = "Yes";
+		if (blueBalanced) blueb = "Yes";
+		dataTable.innerHTML += "<tr><td>" + redb + "</td><td><strong>Switch Balanced</strong></td><td>" + blueb + "</td></tr>";
+		dataTable.innerHTML += "<tr><td><small>" + redTurningPoint1 + "</small></td><td><strong>Keys to Success</strong></td><td><small>" + blueTurningPoint1 + "</small></td></tr>";
+		dataTable.innerHTML += "<tr><td><small>" + redTurningPoint2 + "</small></td><td>(beta)</td><td><small>" + blueTurningPoint2 + "</small></td></tr>";
 	}
 }
 
@@ -277,9 +460,7 @@ function simDisplayTeam(alliance, index) {
 	var box = document.getElementById("simTeamAttributes");
 	var teamStats, allianceStats;
 	var ds = "";
-	console.log("started");
 	if (localStorage.simActiveBlue == "") {
-		console.log("nope");
 		ds = "<p><em>Click on a team above to view their individual output</em></p>";
 	} else {
 		// Obtain red or blue alliance data
@@ -290,7 +471,7 @@ function simDisplayTeam(alliance, index) {
 		teamno = teamStats.teamno;
 		
 		// Collect team's attributes from its object
-		ds = "<h3>" + teamno + "</h3><h4>" + get_team_name(teamno.toString()) + "</h4>";
+		ds = "<h2><a target='_blank' href='master_view_team.html' onclick='localStorage.currentTeam = " + teamno + "'>" + teamno + "</a></h2><h4>" + get_team_name(teamno.toString()) + "</h4>";
 		ds += "<p>RPI: " + teamStats.rpi[0] + " (" + teamStats.rpi[1] + ")</p>";
 		ds += "<p># of Auto Cells Scored: " + teamStats.auto[1] + "</p>";
 		ds += "<p># of Teleop Cells Scored: " + teamStats.powerport[1] + "</p>";

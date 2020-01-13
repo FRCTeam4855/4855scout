@@ -69,15 +69,15 @@ function calculate_rpi(forms, factorPenalties, generateByEventKey, eventKey, gen
 		rpiQuality = "Very Poor";
 	else if (rpi < 38)
 		rpiQuality = "Poor";
-	else if (rpi < 58)
+	else if (rpi < 54)
 		rpiQuality = "Below Average";
 	else if (rpi < 70)
 		rpiQuality = "Average";
-	else if (rpi < 86)
+	else if (rpi < 92)
 		rpiQuality = "Good";
-	else if (rpi < 98)
+	else if (rpi < 104)
 		rpiQuality = "Very Good";
-	else if (rpi < 110)
+	else if (rpi < 125)
 		rpiQuality = "Excellent";
 	else rpiQuality = "Godly";
 	

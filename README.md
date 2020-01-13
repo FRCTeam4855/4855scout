@@ -1,6 +1,6 @@
 4855 Scouter
 ============
-## Version 2020.0
+## Version 2020.2
 ### Setup
 
 Before you use this program at a competition, please ensure that you are using the latest version. Check with your lead scouter to ensure that you do. For team Ramageddon, all versions of the scouter are available in the Scouting folder in the Robotics Google Drive folder.

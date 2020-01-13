@@ -12,7 +12,7 @@
 			<li>You have no teams in your database. Import some data by clicking below!</li>
 		</ul>
 		<div class="buttonList">
-			<a href="scout_form.html" onclick="set_source()">Create new data</a>
+			<a id="NEWBUTTON" href="scout_form.html" onclick="set_source()">Create new data</a>
 			<a href="master_upload.html">Import data</a>
 			<a href="#" onclick="export_data('master')">Export data</a>
 			<a class="clearButton" href="master_main.html" onclick="reset_data()">Reset all</a>
@@ -29,6 +29,10 @@
 	<script>
 		function set_source() {
 			localStorage.source = "master";
+			if (localStorage.init) {
+				alert("WARNING: You already have data submitted as a normal scouter. You must first reset your data there before you can submit data as a master scouter.");
+				document.getElementById("NEWBUTTON").href = "/index.html";
+			}
 		}
 		function load_data() {
 			if (localStorage.masterInit) {

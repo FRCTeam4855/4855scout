@@ -12,7 +12,7 @@
 			<li>You have no teams scouted. Click below to start scouting!</li>
 		</ul>
 		<div class="buttonList">
-			<a href="scout_form.html" onclick="set_source()">Create new</a>
+			<a id="NEWBUTTON" href="scout_form.html" onclick="set_source()">Create new</a>
 			<a href="#" onclick="export_data('scouter')">Export data</a>
 			<a class="clearButton" href="scouter_main.html" onclick="reset_data()">Reset all</a>
 		</div>
@@ -25,6 +25,10 @@
 		<script>
 			function set_source() {
 				localStorage.source = "scout";
+				if (localStorage.masterInit) {
+					alert("WARNING: You already have data submitted as a master scouter. You must first reset your data there before you can submit data as a scouter.");
+					document.getElementById("NEWBUTTON").href = "/index.html";
+				}
 			}
 			function load_data() {
 				let init = localStorage.init;

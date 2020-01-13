@@ -21,7 +21,7 @@ function get_stat(teamno, stat) {
 			autohigh = Math.round(autohigh / allForms);
 			return [autocross + autolow * 2 + autohigh * 4, autolow + autohigh];
 		case "powerport":
-			// Returns an array with points scored and # pieces scored
+			// Returns an array with points scored, # pieces scored, and the percent of goals that are high goals
 			var lowport = 0, highport = 0;
 			var allForms = 0;
 			for (i = 0; i < forms.length; i ++) {
@@ -31,9 +31,9 @@ function get_stat(teamno, stat) {
 				lowport += Number(forms[i].lowport);
 				highport += Number(forms[i].highport);
 			}
-			lowport = Math.round(lowport / allForms)
+			lowport = Math.round(lowport / allForms);
 			highport = Math.round(highport / allForms);
-			return [lowport + highport * 2, lowport + highport];
+			return [lowport + highport * 2, lowport + highport, highport / (highport + lowport)];
 		case "cp":
 			// Returns an array for both stage 2 or stage 3 with either true or false depending on whether or not the team can spin the control panel
 			var cp2 = false, cp3 = false, verbals = false;
@@ -74,7 +74,7 @@ function get_stat(teamno, stat) {
 		case "defense":
 			// Calculates the defensive strength of a team and whether or not they're likely to play any defense
 			// Defensive ability is returned by a number estimating the number of game pieces the defender can prevent the offense from scoring. Teams that would rather not play defense (and don't very often) will receive low ratings due to an inferred timid nature, and teams that are willing will rate higher. Teams that frequently play defense will receive a higher rating even if the quality isn't strong every time
-			var drate = 0, dwill = 0;	// defensive power rating, odds that team will want to play defense (between 0 and 1)
+			var drate = 2, dwill = 0.1;	// defensive power rating, odds that team will want to play defense (between 0 and 1)
 			var verbals = false;
 
 			// First evaluate the verbal reports. If a team expresses no desire to defend, all values can be returned as 0
@@ -89,7 +89,7 @@ function get_stat(teamno, stat) {
 				}
 				if (forms[i].defense == "2") {				// team is able and willing
 					dwill = .14;	
-					drate = 3;
+					drate = 6;
 				}
 			}
 

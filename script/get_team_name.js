@@ -118,6 +118,8 @@ function get_team_name(teamno) {
 			return "Brighton TechnoDogs";
 		case 3875:
 			return "Red Storm Robotics";
+		case 4003:
+			return "TriSonics";
 		case 4004:
 			return "M.A.R.S. Rovers";
 		case 4130:
@@ -134,6 +136,8 @@ function get_team_name(teamno) {
 			return "Boyne City Blaze";
 		case 4381:
 			return "Twisted Devils";
+		case 4384:
+			return "Benzene Bots";
 		case 4408:
 			return "Panthera Machina";
 		case 4409:
@@ -158,6 +162,8 @@ function get_team_name(teamno) {
 			return "Singularity";
 		case 5069:
 			return "Iron Giants";
+		case 5110:
+			return "Robo Herd";
 		case 5114:
 			return "Titanium Tigers";
 		case 5152:
@@ -186,8 +192,12 @@ function get_team_name(teamno) {
 			return "Bobcats";
 		case 5535:
 			return "Bionic Bison";
+		case 5547:
+			return "The Talons";
 		case 5559:
 			return "Gear Grinders";
+		case 5562:
+			return "Laker Logistics";
 		case 5610:
 			return "Turbulence";
 		case 5623:
@@ -196,6 +206,8 @@ function get_team_name(teamno) {
 			return "WiredCats";
 		case 5688:
 			return "Robo Cats";
+		case 5710:
+			return "The O-Bots";
 		case 5843:
 			return "Flurb";
 		case 5926:
@@ -243,7 +255,7 @@ function get_team_name(teamno) {
 		case 7221:
 			return "JHS Viking Robotics";
 		case 7234:
-			return "Rebel Robotics";
+			return "GLADIATORS";
 		case 7248:
 			return "Tactical Hams";
 		case 7254:
@@ -262,8 +274,12 @@ function get_team_name(teamno) {
 			return "Belding RoboKnights";
 		case 8126:
 			return "Control Freaks";
+		case 8344:
+			return "OV Cardinal Robotics";
 		case 8363:
 			return "Marcellus W1LdBots";
+		case 8397:
+			return "Mission Control Robotics";
 		default:
 			return "???";
 	}
