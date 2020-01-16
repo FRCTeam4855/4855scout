@@ -53,7 +53,7 @@ function get_stat(teamno, stat) {
 			}
 			return [cp2, cp3];
 		case "endgame":
-			// Calculates endgame scoring with an array containing a string for what the team did and whether or not they can potentially balance the switch with a partner
+			// Calculates endgame scoring with an array containing a string for what the team did, whether or not they can potentially balance the switch with a partner, and how many timmes they've climbed
 			var climb = "-", level = false;
 			var climbno = 0, parkno = 0, levelno = 0;
 			var allForms = 0;
@@ -70,7 +70,7 @@ function get_stat(teamno, stat) {
 			if (parkno + climbno < Math.ceil(allForms * .5)) climb = "-";
 			if (levelno <= 1 && allForms > 4) level = false;	// we can reasonably assume that they probably can't level most of the time if they only did it one out of four times
 			else if (levelno >= 1) level = true;
-			return [climb, level];
+			return [climb, level, climbno];
 		case "defense":
 			// Calculates the defensive strength of a team and whether or not they're likely to play any defense
 			// Defensive ability is returned by a number estimating the number of game pieces the defender can prevent the offense from scoring. Teams that would rather not play defense (and don't very often) will receive low ratings due to an inferred timid nature, and teams that are willing will rate higher. Teams that frequently play defense will receive a higher rating even if the quality isn't strong every time

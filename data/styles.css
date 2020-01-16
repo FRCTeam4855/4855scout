@@ -126,21 +126,35 @@ h2 a {
 	font-weight: normal;
 	font-style: italic;
 }
-#rpi {
+#rpiInfo h3 {
 	color: #412561;
 	font-size: 160%;
-	text-decoration: underline;
-	font-weight: normal;
-	margin-bottom: 12px;
+	margin: 8px 0 12px;
+}
+#rpi, .overview h4 {
+	margin: 6px 0;
+}
+#rpi {
+	font-size: 120%;
 }
 #rpiInfo {
 	border: 2px solid #000;
-	padding: 14px;
+	padding: 16px;
 	margin: 14px auto;
-	max-width: 500px;
+	max-width: 700px;
 	display: block;
 	text-align: center;
 	background-color: #D2D2D2;
+}
+.overview {
+	display: inline-block;
+	width: 45%;
+	margin: 10px 6px;
+	text-align: center;
+	vertical-align: top;
+}
+.overview p {
+	margin: 6px 0;
 }
 #rpiAdjusts {
 	text-align: center;

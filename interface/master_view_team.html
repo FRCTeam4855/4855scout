@@ -10,8 +10,15 @@
 		<h1 id="reportDisplay">VIEWING REPORTS FOR TEAM </h1>
 		<h4 id="tbalink"></h4>
 		<div id="rpiInfo">
-			<h3 id="rpi">CALCULATED RPI: </h3>
-			<!--<p id="rpiAdjusts"></p>-->
+			<h3>Team Overview</h3>
+			<h4 id="rpi">Calculated RPI: </h4>
+			<div id="overview1" class="overview">
+				<h4>Skills</h4>
+			</div>
+			<div id="overview2" class="overview">
+				<h4>Attributes/Abilities</h4>
+			</div>
+			<br>
 			<small>A team's RPI (Ramageddon Power Index) is used to represent the team's average contribution to an alliance. RPI is adjusted based on all scoring counts from every available scouting sheet; therefore, as such, its accuracy is far greater with a large quantity of sheets. RPI should not be the only metric used to assess the quality of a team.</small>
 		</div>
 		<div id="teamReports">
@@ -26,6 +33,8 @@
 		<script type="text/javascript" src="../script/get_team_name.js"></script>
 		<script type="text/javascript" src="../script/get_match_key.js"></script>
 		<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+		<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
+		<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
 		<script>
 			function load_data() {
 				// Display team number and blue alliance link
@@ -54,11 +63,97 @@
 					form_print_data(myForm, document.getElementById("teamReports"));
 				}
 				
-				// Print out the RPI
+				// Print out an overview of the team's stats
 				var powerInfo = calculate_rpi(formArray, true, false, "", false, "");
 				if (powerInfo[0] == -999) powerInfo[0] = 0;
-				document.getElementById("rpi").innerHTML += "<strong>" + powerInfo[0] + "</strong> (" + powerInfo[1] + ")";
+				document.getElementById("rpi").innerHTML += "" + powerInfo[0] + " (" + powerInfo[1] + ")";
 				
+				// Start with skills column
+				var breakdowns = 0, penalties = 0;
+				var forms = get_team_forms(team.toString());
+				for (var f = 0; f < forms.length; f ++) {
+					var form = forms[f];
+					if (form.formtype == "match") {
+						if (form.breakdown == "true") breakdowns ++;
+						if (form.penalties == "true") penalties ++;
+					}
+				}
+				var column1 = document.getElementById("overview1");
+				var ds = "";
+				//ds += "<p>: <strong>" + v + "</strong></p>";
+				ds += "<p>Avg. Auton Cells Scored: <strong>" + get_stat(team, "auto")[1] + "</strong></p>";
+				ds += "<p>Avg. Teleop Cells Scored: <strong>" + get_stat(team, "powerport")[1] + "</strong></p>";
+				ds += "<p>Most Common Endgame: <strong>" + get_stat(team, "endgame")[0] + "</strong></p>";
+				var dss = "Very Weak", dstrength = get_stat(team, "defense")[0];
+				if (dstrength <= 3)
+					dss = "Very Weak";
+				else if (dstrength <= 6)
+					dss = "Weak";
+				else if (dstrength <= 9)
+					dss = "Moderate";
+				else if (dstrength <= 13)
+					dss = "Strong";
+				else dss = "<span style='color: red;'>Very Strong</span>";
+				ds += "<p>Defensive Strength: <strong>" + dss + "</strong></p>";
+				ds += "<p>Times Broken Down: <strong>" + breakdowns + "</strong></p>";
+				ds += "<p>Times Drawn Significant Penalties: <strong>" + penalties + "</strong></p>";
+				column1.innerHTML += ds;
+				
+				// Attributes/abilities column
+				var drivetrain = "?", weight = "?", defense = "?", cp2 = "?", cp3 = "?";
+				var canCp2 = -1, canCp3 = -1;
+				for (var f = 0; f < forms.length; f ++) {	// forms was defined earlier
+					var form = forms[f];
+					if (form.formtype == "verbal") {
+						drivetrain = form.drivetrain;
+						weight = form.weight + "lbs";
+						canCp2 = form.cp2;
+						canCp3 = form.cp3;
+					}
+				}
+				var dodds = get_stat(team, "defense")[1];
+				if (dodds <= 0)
+					defense = "Incapable";
+				else if (dodds <= 0.35)
+					defense = "Infrequently";
+				else if (dodds <= 0.45)
+					defense = "Occasionally";
+				else if (dodds <= 0.75)
+					defense = "Frequently";
+				else if (dodds <= 0.85)
+					defense = "Very Frequently";
+				else defense = "<span style='color: red;'>Almost Always</span>";
+				if (canCp2 == -1 || canCp3 == -1) {
+					canCp2 = get_stat(team, "cp")[0];
+					canCp3 = get_stat(team, "cp")[1];
+					if (canCp2) {
+						cp2 = "Yes";
+					} else cp2 = "<em>No?</em>";
+					if (canCp3) {
+						cp3 = "Yes";
+					} else cp3 = "<em>No?</em>";
+				} else {
+					if (canCp2 == "true") {
+						cp2 = "Yes";
+					} else cp2 = "No";
+					if (canCp3 == "true") {
+						cp3 = "Yes";
+					} else cp3 = "No";
+				}
+				
+				var column2 = document.getElementById("overview2");
+				ds = "";
+				//ds += "<p>: <strong>" + v + "</strong></p>";
+				ds += "<p>Drivetrain: <strong>" + drivetrain + "</strong></p>";
+				ds += "<p>Inspection Weight: <strong>" + weight + "</strong></p>";
+				ds += "<p>Can Do Rotational Control: <strong>" + cp2 + "</strong></p>";
+				ds += "<p>Can Do Positional Control: <strong>" + cp3 + "</strong></p>";
+				ds += "<p>Frequency of Defense: <strong>" + defense + "</strong></p>";
+				var c = "No"
+				ds += "<p>Number of Climbs: <strong>" + get_stat(team, "endgame")[2] + "</strong></p>";
+				column2.innerHTML += ds;
+				
+				document.getElementById("rpiInfo").innerHTML += "<h5>Total # of forms for team: " + forms.length + "</h5>";
 			}
 		</script>
 	</body>
