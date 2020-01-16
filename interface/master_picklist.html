@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Picklist Generator :: 4855 Scouting</title>
+		<script type="text/javascript"></script>
+    	<link href="../data/styles.css" rel="stylesheet" type="text/css">
+	</head>
+	<body onload="load_data()">
+		<h1>PICKLIST GENERATOR</h1>
+		<form id="rpilist" onSubmit="false">
+			<label for="filterByEvent">Filter by event key: </label>
+			<input type="checkbox" id="filterByEvent" name="filterByEvent"><br>
+			<label for="filterByEvent">Event key: </label>
+			<select id="eventKey" name="eventKey" onChange="localStorage.filterKey = document.getElementById('eventKey').value;">
+
+			</select>
+			<input type="button" value="Apply" onClick="load_data();" style="margin: 10px auto;">
+		</form>
+		<div id="pickChoices">
+			
+		</div>
+		<div id="pickForm">
+			<label for="desire">I want...</label>
+			<select id="desire" name="desire" onChange="update_rankings();">
+				<option value="rpi">the best all-around robot</option>
+				<option value="powercell">the best power cell bot</option>
+				<option value="defense">the best defender (no scoring needed)</option>
+				<option value="defenseScorer">the best score-capable defender</option>
+				<option value="custom">Custom...</option>
+			</select>
+		</div>
+		<div id="pickCustom">
+			<div class="ctrl">
+				<label for="auto">Autonomous Scoring</label>
+				<input type="range" name="auto" id="pAuto" min="0" max="4" step=".2" onChange="update_rankings();"/>
+			</div>
+			<div class="ctrl">
+				<label for="teleop">Teleoperated Scoring</label>
+				<input type="range" name="teleop" id="pTeleop" min="0" max="4" step=".2" onChange="update_rankings();"/>
+			</div>
+			<div class="ctrl">
+				<label for="climb">Climbing Ability</label>
+				<input type="range" name="climb" id="pClimb" min="0" max="4" step=".2" onChange="update_rankings();"/>
+			</div>
+			<div class="ctrl">
+				<label for="defense">Defensive Ability</label>
+				<input type="range" name="defense" id="pDefense" min="0" max="4" step=".2" onChange="update_rankings();"/>
+			</div>
+		</div>
+		<h2 style="text-align: center;">PICK SUGGESTIONS</h2>
+		<div id="availableList">
+			<table cellspacing="0" cellpadding="0">
+				
+			</table>
+		</div>
+		<div style="width: 100%; max-width: 450px; margin: 0 auto; padding: 12px; text-align: center;">
+			<h5 style="text-align: center; margin-bottom: 12px;">Flag Key: PF = Penalty Flags, BF = Breakdown Flags</h5>
+			<small>The Flags column will show how many matches a scouter indicated that a team broke down or incurred a large number of penalties. This program does not rank teams based on these flags and they should be interpreted by the user.</small>
+		</div>
+		<div class="buttonList">
+			<a href="master_main.html">Go back</a>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/get_version.js"></script>
+	<script type="text/javascript" src="../script/get_team_name.js"></script>
+	<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
+	<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
+	<script type="text/javascript" src="../script/calculate_rpi.js"></script>
+	<script>
+		function load_data() {
+			// Pull arrays of teams
+			var teamList = JSON.parse(localStorage.teamList);
+			var workingTeamList = [];
+			var formList = JSON.parse(localStorage.formList);
+			var teamsWithData = JSON.parse(localStorage.teamsWithData);
+			var eventKeys = [];
+
+			// Iterate through every form and see what event keys there are to choose from to filter by
+			for (var i = 0; i < formList.length; i ++) {
+				var ek = JSON.parse(localStorage.getItem("form-" + teamList[i] + "-" + formList[i])).eventkey;
+				if (eventKeys.indexOf(ek) == -1) eventKeys.push(ek);
+			}
+
+			// Now add each one to the select list
+			var ds = '<option value="" selected disabled>Pick an event key</option>';
+			for (i = 0; i < eventKeys.length; i ++) {
+				ds += '<option value="' + eventKeys[i] + '">' + eventKeys[i] + '</option>';
+			}
+			document.getElementById("eventKey").innerHTML = ds;
+			document.getElementById("eventKey").value = localStorage.filterKey;
+			
+			// Filter down teams by the selection
+			// For every team in the team list
+			for (var i = 0; i < teamsWithData.length; i ++) {
+				var team = teamsWithData[i].toString();
+				var forms = get_team_forms(team);
+				var ek = localStorage.filterKey;
+				var hasFormForEvent = false;
+				// For every form in that team's list of forms
+				forms.forEach(function(form, ind) {
+					if (form.eventkey == ek) hasFormForEvent = true;
+				});
+				if (document.getElementById("filterByEvent").checked == false) hasFormForEvent = true;
+				if (hasFormForEvent) workingTeamList.push(team);
+			}
+			
+			// Output each team with its respective controls
+			var choices = document.getElementById("pickChoices");
+			choices.innerHTML = "";
+			workingTeamList.forEach(function(team, ind) {
+				var ds = '<div class="pickChoice" id="' + team + 'box">';
+				ds += '<h3><a target="_blank" href="master_view_team.html" onclick="localStorage.currentTeam = ' + team + ';">' + team + '</a></h3>';
+				ds += '<h4>' + get_team_name(team) + '</h4>';
+				ds += '<label>Blacklist</label><label>Not available</label><br>';
+				ds += '<input type="checkbox" onChange="update_rankings();" id="' + team + 'blacklist"/>';
+				ds += '<input type="checkbox" onChange="update_rankings();" id="' + team + 'na"/>';
+				ds += '</div>';
+				choices.innerHTML += ds;
+			});
+			
+			// Store teams in a format which can be accessed later
+			localStorage.workingTeamList = JSON.stringify(workingTeamList);
+			
+			// Update the rankings
+			update_rankings();
+		}
+		
+		// Update the rankings for best picks
+		function update_rankings() {
+			// If the user chose custom, make the controls appear
+			var desire = document.getElementById("desire").value;
+			if (desire == "custom") {
+				document.getElementById("pickCustom").style.display = "block";
+			} else document.getElementById("pickCustom").style.display = "none";
+			
+			var availableTeamList = JSON.parse(localStorage.workingTeamList);
+			var workingTeamList = [];
+			switch (desire) {
+				case "rpi":
+					// Sort best teams simply by their general power rating, indicating their general strength
+					for (var i = 0; i < availableTeamList.length; i ++) {
+						var teamno = availableTeamList[i];
+						if (!document.getElementById(teamno + "na").checked) {
+							workingTeamList.push([teamno, calculate_rpi(get_team_forms(teamno), false, false, "", false, "")[0]]);
+						}
+					}
+					break;
+				case "powercell":
+					// Sort best teams simply by the total number of power cells they process per match
+					for (var i = 0; i < availableTeamList.length; i ++) {
+						var teamno = availableTeamList[i];
+						if (!document.getElementById(teamno + "na").checked) {
+							var forms = get_team_forms(teamno);
+							var pc = 0, totalForms = 0;
+							for (var form = 0; form < forms.length; form ++) {
+								if (forms[form].formtype != "verbal") {
+									totalForms ++;
+									pc += Number(forms[form].autolow) + Number(forms[form].autohigh) + Number(forms[form].lowport) + Number(forms[form].highport);
+								}
+							}
+							pc = Math.round(pc * 10 / totalForms) / 10;
+							workingTeamList.push([teamno, pc]);
+						}
+					}
+					break;
+				case "defense":
+					// Sort teams by defensive power
+					for (var i = 0; i < availableTeamList.length; i ++) {
+						var teamno = availableTeamList[i];
+						if (!document.getElementById(teamno + "na").checked) {
+							dp = get_stat(teamno, "defense")[0];
+							workingTeamList.push([teamno, dp]);
+						}
+					}
+					break;
+				case "defenseScorer":
+					// Sort teams by defensive and teleop scoring power, prioritizing defense but still emphasizing strength
+					for (var i = 0; i < availableTeamList.length; i ++) {
+						var teamno = availableTeamList[i];
+						if (!document.getElementById(teamno + "na").checked) {
+							var forms = get_team_forms(teamno);
+							var offense = 0, totalForms = 0;
+							for (var form = 0; form < forms.length; form ++) {
+								if (forms[form].formtype != "verbal") {
+									totalForms ++;
+									offense += Number(forms[form].autolow) + Number(forms[form].autohigh) + Number(forms[form].lowport) + Number(forms[form].highport);
+									offense += Number(forms[form].climb) * 3;
+								}
+							}
+							var total = -1, dp = -1;
+							if (totalForms > 0) {
+								offense /= totalForms;
+								dp = get_stat(teamno, "defense")[0];
+								total = Math.round((offense * .6 + dp * 2) * 10) / 10;
+							}
+							workingTeamList.push([teamno, total]);
+						}
+					}
+					break;
+				case "custom":
+					// Sort best teams by custom values
+					var weightAuto = document.getElementById("pAuto").value;
+					var weightTeleop = document.getElementById("pTeleop").value;
+					var weightClimb = document.getElementById("pClimb").value;
+					var weightDefense = document.getElementById("pDefense").value;
+					for (var i = 0; i < availableTeamList.length; i ++) {
+						var teamno = availableTeamList[i];
+						if (!document.getElementById(teamno + "na").checked) {
+							var forms = get_team_forms(teamno);
+							var auto = 0, teleop = 0, climb = 0, defense = 0, totalForms = 0;
+							for (var form = 0; form < forms.length; form ++) {
+								if (forms[form].formtype != "verbal") {
+									totalForms ++;
+									auto += Number(forms[form].autolow) * 2 + Number(forms[form].autohigh) * 4 + Number(forms[form].autocross) * 5;
+									teleop += Number(forms[form].lowport) + Number(forms[form].highport) * 2;
+									if (Number(forms[form].climb) > 1) climb += 25 + Number(forms[form].climblevel) * 5;
+								}
+							}
+							defense = get_stat(teamno, "defense")[0];
+							auto /= totalForms;
+							teleop /= totalForms;
+							climb /= totalForms;
+							auto *= weightAuto;
+							teleop *= weightTeleop;
+							climb *= weightClimb;
+							defense *= weightDefense;
+							workingTeamList.push([teamno, Math.round((auto + teleop + climb + defense) * 10) / 10]);
+						}
+					}
+					break;
+			}
+			
+			// Sort the 2D array by whatever number exists in the second column of information
+			workingTeamList.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			
+			// Print out teams
+			var table = document.querySelector("#availableList table");
+			var prevRankVal = 0, prevRank = 1;
+			table.innerHTML = "<thead><td></td><td>Team #</td><td>Name</td><td>RPI</td><td>Rank Value</td><td>Flags</td></thead>";
+			for (var i = 0; i < workingTeamList.length; i ++) {
+				var ds = "";
+				var teamno = workingTeamList[i][0];
+				var rankVal = workingTeamList[i][1];
+				if (document.getElementById(teamno + "blacklist").checked) ds += "<tr style='background-clip: padding-box; font-style: italic; background-color: #FFBBBB; color: #777777'>"; else ds +="<tr>";
+				var displayRank = i + 1;
+				if (prevRankVal == rankVal) displayRank = prevRank;
+				ds += "<td class='pickrank'>" + displayRank + "</td>";
+				ds += '<td><a target="_blank" href="master_view_team.html" onclick="localStorage.currentTeam = ' + teamno + ';">' + teamno + "</a></td>";
+				ds += "<td>" + get_team_name(teamno) + "</td>";
+				ds += "<td>" + calculate_rpi(get_team_forms(teamno), false, false, "", false, "")[0] + "</td>";
+				ds += "<td>" + rankVal + "</td>";
+				// Generate numbers of penalty flags and breakdown flags
+				var pf = 0, bf = 0;
+				var pfStyle = "", bfStyle = "";
+				var forms = get_team_forms(teamno);
+				for (var form = 0; form < forms.length; form ++) {
+					if (forms[form].penalties == "true") pf ++;
+					if (forms[form].breakdown == "true") bf ++;
+				}
+				if (pf > 0) pfStyle = "color: red;";
+				if (bf > 0) bfStyle = "color: red;";
+				ds += "<td style='color: #CCCCCC'><span style='" + pfStyle + "'>" + pf + " PF</span>, <span style='" + bfStyle + "'>" + bf + " BF</span></td>"
+				table.innerHTML += ds + "</tr>";
+				
+				prevRankVal = rankVal;
+				prevRank = displayRank;
+			}
+		}
+	</script>
+</html>

@@ -120,34 +120,10 @@
 	<script type="text/javascript" src="../script/calculate_rpi.js"></script>
 	<script type="text/javascript" src="../script/simulate_match.js"></script>
 	<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
+	<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
 	
 	<script>
 		window.addEventListener('load', simulate_match);
-		
-		// Takes a team number and returns an array of all its forms
-		function get_team_forms(teamno) {
-			// Grab team list and form ID list
-			var teamList = JSON.parse(localStorage.teamList);
-			var formList = JSON.parse(localStorage.formList);
-			var indexList = [];
-
-			// Select all forms containing this team
-			for (var i = 0; i < teamList.length; i ++) {
-				if (teamList[i] == teamno) indexList.push(i);
-			}
-
-			var formArray = [];
-
-			// Package all relevant forms
-			for (var i = 0; i < indexList.length; i ++) {
-				thisID = "form-" + teamno + "-" + formList[indexList[i]];
-				var myJSON = localStorage.getItem(thisID);
-				var myForm = JSON.parse(myJSON);
-				formArray.push(myForm);
-			}
-			
-			return formArray;
-		}
 		
 		function load_data() {
 			if (localStorage.masterInit) {

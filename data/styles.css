@@ -4,7 +4,7 @@ html {
 	min-height: 100%;
 }
 body {
-	padding: 40px 2% 70px;
+	padding: 30px 2% 70px;
 	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
 	background-image: -webkit-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
 	background-image: -moz-linear-gradient(270deg,rgba(255,255,255,1.00) 64.25%,rgba(65,37,97,0.71) 100%);
@@ -41,6 +41,12 @@ h2 a {
 }
 #titleRam {
 	width: 100px;
+	margin: auto;
+	display: block;
+	height: auto;
+}
+#footerImg {
+	width: 125px;
 	margin: auto;
 	display: block;
 	height: auto;
@@ -90,27 +96,28 @@ h2 a {
 	text-align: center;
 }
 #scoutedList li, #masterTeamList li {
-	padding: 16px;
+	padding: 10px;
 	display: inline-block;
 	border-width: 2px;
 	margin: 6px;
 	border-style: solid;
 	background-color: #D2D2D2;
-	width: 200px;
+	width: 180px;
 	vertical-align: middle;
-	min-height: 130px;
+	height: 120px;
 }
 #scoutedList li h2, #masterTeamList h2 {
 	text-align: center;
-	font-size: 170%;
+	font-size: 150%;
 	padding: 0;
-	margin: 6px 0 10px;
+	margin: 8px 0;
 }
 #scoutedList li h3, #masterTeamList h3 {
 	text-align: center;
-	font-size: 120%;
+	font-size: 110%;
 	font-style: italic;
 	font-weight: normal;
+	margin: 10px 0 12px;
 }
 #tbalink {
 	text-align: center;
@@ -139,6 +146,22 @@ h2 a {
 	text-align: center;
 	font-style: italic;
 	margin-bottom: 12px;
+}
+#bestScouters {
+	display: none;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 8px 0;
+	margin: 48px auto;
+	max-width: 500px;
+}
+#bestScouters ol {
+	padding-left: 0;
+	text-align: center;
+}
+#bestScouters ol li {
+	padding-bottom: 6px;
 }
 
 /*Display styles for a form's data*/
@@ -397,4 +420,80 @@ h2 a {
 }
 #simGameBreakdown table td {
 	padding: 6px;
+}
+
+/* Display styles for the picklist interface */
+
+#pickChoices {
+	text-align: center;
+	background-color: #412561;
+	padding: 16px;
+}
+.pickChoice {
+	margin: 10px;
+	display: inline-block;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 8px 0;
+	width: 150px;
+	height: 100px;
+	vertical-align: middle;
+}
+.pickChoice h3 {
+	margin: 4px;
+}
+.pickChoice h4 {
+	margin: 2px;
+	font-size: 70%;
+}
+.pickChoice label {
+	font-size: 60%;
+	margin: 0 6px;
+}
+.pickChoice input {
+	margin: 4px 16px;
+}
+#pickForm {
+	text-align: center;
+	margin: 20px 0;
+}
+#availableList {
+	width: 100%;
+	max-width: 600px;
+	margin: 24px auto;
+	text-align: center;
+	border: 2px solid #000;
+	background-color: #E7E7E7;
+	padding: 16px;
+}
+#availableList table {
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+#availableList table tr td {
+	padding: 3px 6px;
+}
+#availableList table thead {
+	font-weight: bold;
+	color: #412561;
+	font-size: 110%;
+}
+.pickrank {
+	font-weight: bold;
+	text-shadow: 2px 2px 4px #412561;
+}
+#pickCustom {
+	text-align: center;
+	max-width: 900px;
+	width: 100%;
+	margin: 24px auto;
+}
+#pickCustom .ctrl {
+	display: inline-block;
+	width: 200px;
+	border: 2px solid #000;
+	background-color: #412561;
+	color: white;
+	padding: 8px;
 }

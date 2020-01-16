@@ -4,7 +4,6 @@
 // Returns a team name when given its team number, otherwise spits out question marks
 // Only returns common team numbers in the FiM area who we usually compete against
 function get_team_name(teamno) {
-	console.log(Number(teamno));
 	switch (Number(teamno)) {
 		case 1:
 			return "The Juggernauts";

@@ -19,8 +19,14 @@
 		</div>
 		<div class="buttonList">
 			<a href="master_rpi_rankings.html">RPI Rankings</a>
+			<a href="master_picklist.html">Picklist Generator</a>
 			<a href="master_match_sim.html">Simulate Match</a>
 			<a href="../index.html">Go back</a>
+		</div>
+		<div id="bestScouters">
+			<h2>BEST SCOUTERS</h2>
+			<ol id="scouterRankings">
+			</ol>
 		</div>
 	</body>
 	<script type="text/javascript" src="../script/get_version.js"></script>
@@ -53,6 +59,7 @@
 					ds = "<li><h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
 					document.getElementById("masterTeamList").innerHTML += ds;
 				}
+				get_scouter_list();
 			}
 		}
 		function set_view_data(id) {
@@ -73,6 +80,36 @@
 			localStorage.removeItem("formList");
 			localStorage.removeItem("teamsWithData");
 			console.log("Master reset completed successfully");
+		}
+		// Returns an ordered list of the number of forms every person has submitted into the database
+		function get_scouter_list() {
+			var nameList = {};
+			var formList = JSON.parse(localStorage.formList);
+			var teamList = JSON.parse(localStorage.teamList);
+			document.getElementById("bestScouters").style.display = "block";
+			// Collect the list
+			formList.forEach(function(formID, index) {
+				let form = JSON.parse(localStorage.getItem("form-" + teamList[index] + "-" + formID));
+				let name = form.name.toUpperCase();
+				if (Object.keys(nameList).indexOf(name) == -1) {
+					nameList[name] = 1;
+				} else nameList[name] ++;
+			});
+			
+			// Sort the list
+			var nameArray = [];
+			for (var name in nameList) {
+				nameArray.push([name, nameList[name]]);
+			}
+			nameArray.sort(function(a, b) {
+				return b[1] - a[1];
+			});
+			
+			// Print the list
+			var leaderboard = document.getElementById("scouterRankings");
+			for (var i = 0; i < nameArray.length; i ++) {
+				leaderboard.innerHTML += "<li>" + nameArray[i][0] + " - " + nameArray[i][1] + " sheet(s) submitted</li>";
+			}
 		}
 	</script>
 </html>
