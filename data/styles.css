@@ -173,6 +173,7 @@ h2 a {
 #bestScouters ol {
 	padding-left: 0;
 	text-align: center;
+	list-style-position: inside;
 }
 #bestScouters ol li {
 	padding-bottom: 6px;
