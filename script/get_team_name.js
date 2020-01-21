@@ -7341,6 +7341,7 @@ const ALL_TEAM_NAMES = {
   "8422": "Pillager High School"
 }
 
+// Returns a team name with a team number string
 function get_team_name(teamno) {
 	return (ALL_TEAM_NAMES[teamno] || "???");
 }
