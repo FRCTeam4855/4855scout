@@ -13,8 +13,14 @@
 		</ul>
 		<div class="buttonList">
 			<a id="NEWBUTTON" href="scout_form.html" onclick="set_source()">Create new</a>
-			<a href="#" onclick="export_data('scouter')">Export data</a>
-			<a class="clearButton" href="scouter_main.html" onclick="reset_data()">Reset all</a>
+			<div class="tooltip">
+				<span class="tooltiptext">This button will download a file containing all the data you've made onto your hard drive. Do this if you want to save where you're at or if you need to send data to your master scouter.</span>
+				<a href="#" onclick="export_data('scouter')">Export data</a>
+			</div>
+			<div class="tooltip">
+				<span class="tooltiptext">Make sure you've exported your data before clicking this button. Resetting will clear all the forms from your database and cannot be undone!</span>
+				<a class="clearButton" href="scouter_main.html" onclick="reset_data()">Reset all</a>
+			</div>
 		</div>
 		<div class="buttonList">
 			<a href="../index.html">Go back</a>

@@ -39,6 +39,36 @@ a:hover {
 h2 a {
 	font-weight: bold;
 }
+.tooltip {
+  	position: relative;
+  	display: inline-block;
+  	border-bottom: 2px dotted #412561;
+}
+.tooltip .tooltiptext {
+  	opacity: 0;
+	visibility: hidden;
+  	background-color: rgba(15, 15, 15, .8);
+  	color: white;
+  	text-align: center;
+  	padding: 4px 8px;
+  	border-radius: 2px;
+ 	transition: opacity .3s;
+	font-size: 11pt;
+	
+	width: 250px;
+  	bottom: 100%;
+  	left: 50%;
+  	margin-left: -125px;
+  	position: absolute;
+  	z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  	opacity: 1;
+	visibility: visible;
+}
+.buttonList .tooltip {
+	border-bottom: none;
+}
 #titleRam {
 	width: 100px;
 	margin: auto;

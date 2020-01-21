@@ -433,16 +433,17 @@ function simulate_match() {
 		if (blueScore - 180 > redScore) redTurningPoint1 = "<strong>Prayers</strong>: Match is expected to be hopelessly lopsided. Maybe their robots will all break down? Simultaneously?";
 		
 		// Populate game data table with information
+		// <div class='tooltip'><span class='tooltiptext'></span>
 		var dataTable = document.getElementById("simGameTable");
 		var redD = "-", blueD = "-";
 		if (redDefender != -1) redD = red[redDefender].teamno;
 		if (blueDefender != -1) blueD = blue[blueDefender].teamno;
 		var averageRedRPI = Math.round(((red[0].rpi[0] + red[1].rpi[0] + red[2].rpi[0]) * 10) / 3) / 10;
 		var averageBlueRPI = Math.round(((blue[0].rpi[0] + blue[1].rpi[0] + blue[2].rpi[0]) * 10) / 3) / 10;
-		dataTable.innerHTML = "<tr><td style='width: 150px'>" + averageRedRPI + "</td><td style='min-width: 200px;'><strong>Average RPI</strong></td><td style='width: 150px;'>" + averageBlueRPI + "</td></tr>";
-		dataTable.innerHTML += "<tr><td>" + redD + "</td><td><strong>Likely Defender</strong></td><td>" + blueD + "</td></tr>";
-		dataTable.innerHTML += "<tr><td>" + red[redTarget].teamno + "</td><td><strong>Strongest Power Cell Team</strong></td><td>" + blue[blueTarget].teamno + "</td></tr>";
-		dataTable.innerHTML += "<tr><td>" + redDefensivePrevention + "</td><td><strong>Defensive Score Prevention</strong></td><td>" + blueDefensivePrevention + "</td></tr>";
+		dataTable.innerHTML = "<tr><td style='width: 150px'>" + averageRedRPI + "</td><td style='min-width: 200px;'><div class='tooltip'><span class='tooltiptext'>The average RPI of the entire alliance</span><strong>Average RPI</strong></div></td><td style='width: 150px;'>" + averageBlueRPI + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + redD + "</td><td><div class='tooltip'><span class='tooltiptext'>When defense is simulated, shows the team that will likely be playing defense in this match</span><strong>Likely Defender</strong></div></td><td>" + blueD + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + red[redTarget].teamno + "</td><td><div class='tooltip'><span class='tooltiptext'>The team that will score the most power cells during the match for each alliance. The likely defender will play defense against this team in the simulation.</span><strong>Strongest Power Cell Team</strong></div></td><td>" + blue[blueTarget].teamno + "</td></tr>";
+		dataTable.innerHTML += "<tr><td>" + redDefensivePrevention + "</td><td><div class='tooltip'><span class='tooltiptext'>The prediction for the number of points that defense is able to remove from the scoreboard</span><strong>Defensive Score Prevention</strong></div></td><td>" + blueDefensivePrevention + "</td></tr>";
 		dataTable.innerHTML += "<tr><td>" + red[0].endgame[0] + "</td><td><strong>Robot 1 Endgame</strong></td><td>" + blue[0].endgame[0] + "</td></tr>";
 		dataTable.innerHTML += "<tr><td>" + red[1].endgame[0] + "</td><td><strong>Robot 2 Endgame</strong></td><td>" + blue[1].endgame[0] + "</td></tr>";
 		dataTable.innerHTML += "<tr><td>" + red[2].endgame[0] + "</td><td><strong>Robot 3 Endgame</strong></td><td>" + blue[2].endgame[0] + "</td></tr>";

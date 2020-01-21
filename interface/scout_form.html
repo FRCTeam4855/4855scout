@@ -15,7 +15,12 @@
 			
 			<fieldset>
 				<input type="hidden" id="formtype" name="formtype" value="match">
-				<label for="name">Scouter Name</label><input id="inName" name="name" required><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Make sure to spell your name the same way on every form. Use first name and last inital (i.e. John S)</span>
+					<label for="name">Scouter Name</label>
+				</div>
+				<input id="inName" name="name" required>
+				<br>
 				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
 				<label for="matchno">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
 				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
@@ -42,7 +47,10 @@
 				<label for="highport"><strong>Power Port</strong> - Cells in high goal</label>
 				<input name="highport" id="inHighport" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
 				
-				<label for="cp2"><strong>Control Panel</strong> - Activated Stage 2 (rotational control)</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Only mark if the team you're watching was the team that physically spun the wheel.</span>
+					<label for="cp2"><strong>Control Panel</strong> - Activated Stage 2 (rotational control)</label>
+				</div>
 				<select name="cp2" id="inCp2" required>
 					<option value="0">Did not complete</option>
 					<option value="1">Completed</option>
@@ -73,13 +81,19 @@
 			
 			<fieldset>
 				<h3 class="fieldsetHead">Endgame</h3>
-				<label for="climb"><strong>Climb</strong> - Success</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Mark "None" if the team failed to reach the rendezvous point. Mark "Parked" if the team's climb failed, or if they just sat in the rendezvous point.</span>
+					<label for="climb"><strong>Climb</strong> - Success</label>
+				</div>
 				<select name="climb" id="inClimb" required>
 					<option value="0">None</option>
 					<option value="1">Parked</option>
 					<option value="2">Climbed</option>
 				</select><br>
-				<label for="climblevel"><strong>Climb</strong> - Able to balance with a partner?</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Mark this box if the team balanced the switch AND did it while another robot climbed.</span>
+					<label for="climblevel"><strong>Climb</strong> - Able to balance with a partner?</label>
+				</div>
 				<select name="climblevel" id="inClimblevel" required>
 					<option value="0">No</option>
 					<option value="1">Yes</option>

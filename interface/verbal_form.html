@@ -15,7 +15,11 @@
 			
 			<fieldset>
 				<input type="hidden" id="formtype" name="formtype" value="verbal">
-				<label for="name">Scouter Name</label><input id="inName" name="name" required><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Make sure to spell your name the same way on every form. Use first name and last inital (i.e. John S)</span>
+					<label for="name">Scouter Name</label>
+				</div>
+				<input id="inName" name="name" required><br>
 				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
 				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
 			</fieldset>
