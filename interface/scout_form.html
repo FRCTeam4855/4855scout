@@ -9,7 +9,10 @@
 	<body onload="pick_button()">
 		<h1>NEW SCOUTING REPORT</h1>
 		<div class="buttonList" style="margin-bottom: 36px;">
-			<a href="verbal_form.html">Verbal Form</a>
+			<div class="tooltip">
+				<span class="tooltiptext">Switch to the verbal form if you're collecting team data by talking to people in the pits.</span>
+				<a href="verbal_form.html">Verbal Form</a>
+			</div>
 		</div>
 		<form id="scout" action="" onsubmit="return false">
 			
@@ -21,9 +24,15 @@
 				</div>
 				<input id="inName" name="name" required>
 				<br>
-				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
-				<label for="matchno">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
-				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
+				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
+				<label for="teamno">Team #</label>
+				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
+				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
+				<div class="tooltip">
+					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event)</span>
+					<label for="eventkey">Event Key</label>
+				</div>
+				<input id="inEventkey" autocomplete="off" required name="eventkey"><br>
 			</fieldset>
 			
 			<fieldset>
@@ -56,7 +65,10 @@
 					<option value="1">Completed</option>
 				</select><br>
 				
-				<label for="cp3"><strong>Control Panel</strong> - Activated Stage 3 (positional control)</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Only mark if the team you're watching was the team that physically spun the wheel.</span>
+					<label for="cp3"><strong>Control Panel</strong> - Activated Stage 3 (positional control)</label>
+				</div>
 				<select name="cp3" id="inCp3" required>
 					<option value="0">Did not complete</option>
 					<option value="1">Completed</option>
@@ -114,11 +126,26 @@
 		<div class="buttonList">
 			<a id="cancelButton" href="scouter_main.html">Cancel</a>
 		</div>
+		<script type="text/javascript" src="../data/settings.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
 		<script type="text/javascript" src="../script/submit_report.js"></script>
 		<script type="text/javascript" src="../script/get_version.js"></script>
 		<script>
 			function pick_button() {
-				if (localStorage.masterInit) document.getElementById("cancelButton").href = "master_main.html";
+				if (localStorage.source == "master") document.getElementById("cancelButton").href = "master_main.html";
+			}
+			
+			if (localStorage.source == "scout") {
+				if (default_event_key != "") document.getElementById("inEventkey").value = default_event_key;
+				if (!allow_event_key_edits) document.getElementById("inEventkey").disabled = true;
+			}
+			
+			function append_team_name() {
+				var teamno = document.getElementById("inTeamno").value;
+				var val = document.getElementById("teamname");
+				if (teamno != "") {
+					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
+				} else val.innerHTML = "Type a team number to verify their name here";
 			}
 		</script>
 	</body>

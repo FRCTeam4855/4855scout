@@ -480,28 +480,7 @@ function simDisplayTeam(alliance, index) {
 		
 		// Print defensive statistics
 		var dstrength = teamStats.defense[0], dodds = teamStats.defense[1];
-		var dss = "", dos = "";
-		if (dstrength <= 3)
-			dss = "Very Weak";
-		else if (dstrength <= 6)
-			dss = "Weak";
-		else if (dstrength <= 9)
-			dss = "Moderate";
-		else if (dstrength <= 13)
-			dss = "<strong>Strong</strong>";
-		else dss = "<strong style='color: red;'>Very Strong</strong>";
-		
-		if (dodds <= 0)
-			dos = "Impossible";
-		else if (dodds <= 0.35)
-			dos = "Low";
-		else if (dodds <= 0.45)
-			dos = "Moderate";
-		else if (dodds <= 0.75)
-			dos = "High";
-		else if (dodds <= 0.85)
-			dos = "<strong>Very High</strong>";
-		else dos = "<strong style='color: red;'>Probable</strong>";
+		var dss = teamStats.defense[2], dos = teamStats.defense[3];
 			
 		ds += "<p>Odds of Playing Defense: " + dos + "</p>";
 		ds += "<p>Defensive Threat: " + dss + " (" + dstrength + ")</p>";

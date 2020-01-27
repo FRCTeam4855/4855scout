@@ -66,9 +66,10 @@ h2 a {
   	opacity: 1;
 	visibility: visible;
 }
-.buttonList .tooltip {
+.buttonList .tooltip, .defenseCheckbox .tooltip {
 	border-bottom: none;
 }
+
 #titleRam {
 	width: 100px;
 	margin: auto;

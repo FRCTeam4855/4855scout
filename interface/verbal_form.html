@@ -9,7 +9,10 @@
 	<body onload="pick_button()">
 		<h1>NEW VERBAL REPORT</h1>
 		<div class="buttonList" style="margin-bottom: 36px;">
-			<a href="scout_form.html">Match Form</a>
+			<div class="tooltip">
+				<span class="tooltiptext">Switch to the match form if you're collecting data by watching a team compete.</span>
+				<a href="scout_form.html">Match Form</a>
+			</div>
 		</div>
 		<form id="scout" action="" onsubmit="return false">
 			
@@ -20,7 +23,9 @@
 					<label for="name">Scouter Name</label>
 				</div>
 				<input id="inName" name="name" required><br>
-				<label for="teamno">Team #</label><input id="inTeamno" name="teamno" autocomplete="off" required><br>
+				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
+				<label for="teamno">Team #</label>
+				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
 				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
 			</fieldset>
 			
@@ -67,11 +72,26 @@
 		<div class="buttonList">
 			<a id="cancelButton" href="scouter_main.html">Cancel</a>
 		</div>
+		<script type="text/javascript" src="../data/settings.js"></script>
+		<script type="text/javascript" src="../script/get_team_name.js"></script>
 		<script type="text/javascript" src="../script/submit_report.js"></script>
 		<script type="text/javascript" src="../script/get_version.js"></script>
 		<script>
 			function pick_button() {
-				if (localStorage.masterInit) document.getElementById("cancelButton").href = "master_main.html";
+				if (localStorage.source == "master") document.getElementById("cancelButton").href = "master_main.html";
+			}
+			
+			if (localStorage.source == "scout") {
+				if (default_event_key != "") document.getElementById("inEventkey").value = default_event_key;
+				if (!allow_event_key_edits) document.getElementById("inEventkey").disabled = true;
+			}
+			
+			function append_team_name() {
+				var teamno = document.getElementById("inTeamno").value;
+				var val = document.getElementById("teamname");
+				if (teamno != "") {
+					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
+				} else val.innerHTML = "Type a team number to verify their name here";
 			}
 		</script>
 	</body>

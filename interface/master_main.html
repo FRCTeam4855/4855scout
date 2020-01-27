@@ -13,9 +13,18 @@
 		</ul>
 		<div class="buttonList">
 			<a id="NEWBUTTON" href="scout_form.html" onclick="set_source()">Create new data</a>
-			<a href="master_upload.html">Import data</a>
-			<a href="#" onclick="export_data('master')">Export data</a>
-			<a class="clearButton" href="master_main.html" onclick="reset_data()">Reset all</a>
+			<div class="tooltip">
+				<span class="tooltiptext">When scouters send you data or when you need to load any data you previously exported, it can be added to your database here.</span>
+				<a href="master_upload.html">Import data</a>
+			</div>
+			<div class="tooltip">
+				<span class="tooltiptext">This button will download a file onto your hard drive containing all the data currently in your database. Use this if you'd like to save your progress for later. The file you download can also be renamed if you need to organize by event.</span>
+				<a href="#" onclick="export_data('master')">Export data</a>
+			</div>
+			<div class="tooltip">
+				<span class="tooltiptext">Make sure you've exported your data before clicking this button. Resetting will clear all the forms from your database and cannot be undone!</span>
+				<a class="clearButton" href="master_main.html" onclick="reset_data()">Reset all</a>
+			</div>
 		</div>
 		<div class="buttonList">
 			<a href="master_rpi_rankings.html">RPI Rankings</a>

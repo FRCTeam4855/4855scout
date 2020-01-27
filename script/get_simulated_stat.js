@@ -74,7 +74,9 @@ function get_stat(teamno, stat) {
 		case "defense":
 			// Calculates the defensive strength of a team and whether or not they're likely to play any defense
 			// Defensive ability is returned by a number estimating the number of game pieces the defender can prevent the offense from scoring. Teams that would rather not play defense (and don't very often) will receive low ratings due to an inferred timid nature, and teams that are willing will rate higher. Teams that frequently play defense will receive a higher rating even if the quality isn't strong every time
+			// Returns a defensive strength rating, defensive playing odds, a string to represent both of these parameters, and a % of the number of matches where defense was played
 			var drate = 2, dwill = 0.1;	// defensive power rating, odds that team will want to play defense (between 0 and 1)
+			var drateString = "", dwillString = "";
 			var verbals = false;
 
 			// First evaluate the verbal reports. If a team expresses no desire to defend, all values can be returned as 0
@@ -82,7 +84,7 @@ function get_stat(teamno, stat) {
 				// Exceptions
 				if (forms[i].formtype == "match") continue;
 				verbals = true;
-				if (forms[i].defense == "0") return [0, 0];	// not a chance
+				if (forms[i].defense == "0") return [0, 0, "Uncertain", "Impossible"];	// not a chance
 				if (forms[i].defense == "1") {				// team would rather not
 					dwill = .08;
 					drate = -2;
@@ -108,7 +110,32 @@ function get_stat(teamno, stat) {
 			// Defensive strength calculated by 2.5 * SQRT((# times on D * 1/2 * strong D games + 1) * (3 / poor D games + 1))
 			drate += Math.round(2.5 * Math.sqrt((dcount * .5 * (dstrong + 1)) * (3 / (dpoor + 1))));
 			drate = Math.max(3, Math.min(drate, 20));	// theoretical max game piece blocking is 20, minimum is 3
-			return [drate, dwill];
+			
+			// Generate strings for defensive rating and will
+			if (drate <= 3)
+				drateString = "Very Weak";
+			else if (drate <= 6)
+				drateString = "Weak";
+			else if (drate <= 9)
+				drateString = "Moderate";
+			else if (drate <= 13)
+				drateString = "<strong>Strong</strong>";
+			else drateString = "<strong style='color: red;'>Very Strong</strong>";
+			
+			if (dwill <= 0)
+				dwillString = "Impossible";
+			else if (dwill <= 0.35)
+				dwillString = "Low";
+			else if (dwill <= 0.45)
+				dwillString = "Moderate";
+			else if (dwill <= 0.75)
+				dwillString = "High";
+			else if (dwill <= 0.85)
+				dwillString = "<strong>Very High</strong>";
+			else dwillString = "<strong style='color: red;'>Probable</strong>";
+			
+			if (dcount < 1) drateString = "Uncertain";
+			return [drate, dwill, drateString, dwillString, Math.round((dcount / allcount) * 1000) / 10];
 	}
 	return 0;
 }

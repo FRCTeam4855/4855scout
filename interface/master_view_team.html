@@ -84,17 +84,8 @@
 				ds += "<p>Avg. Auton Cells Scored: <strong>" + get_stat(team, "auto")[1] + "</strong></p>";
 				ds += "<p>Avg. Teleop Cells Scored: <strong>" + get_stat(team, "powerport")[1] + "</strong></p>";
 				ds += "<p>Most Common Endgame: <strong>" + get_stat(team, "endgame")[0] + "</strong></p>";
-				var dss = "Very Weak", dstrength = get_stat(team, "defense")[0];
-				if (dstrength <= 3)
-					dss = "Very Weak";
-				else if (dstrength <= 6)
-					dss = "Weak";
-				else if (dstrength <= 9)
-					dss = "Moderate";
-				else if (dstrength <= 13)
-					dss = "Strong";
-				else dss = "<span style='color: red;'>Very Strong</span>";
-				ds += "<p>Defensive Strength: <strong>" + dss + "</strong></p>";
+				var dss  = get_stat(team, "defense")[2];
+				ds += "<p>Defensive Strength: " + dss + "</p>";
 				ds += "<p>Times Broken Down: <strong>" + breakdowns + "</strong></p>";
 				ds += "<p>Times Drawn Significant Penalties: <strong>" + penalties + "</strong></p>";
 				column1.innerHTML += ds;
@@ -111,18 +102,7 @@
 						canCp3 = form.cp3;
 					}
 				}
-				var dodds = get_stat(team, "defense")[1];
-				if (dodds <= 0)
-					defense = "Incapable";
-				else if (dodds <= 0.35)
-					defense = "Infrequently";
-				else if (dodds <= 0.45)
-					defense = "Occasionally";
-				else if (dodds <= 0.75)
-					defense = "Frequently";
-				else if (dodds <= 0.85)
-					defense = "Very Frequently";
-				else defense = "<span style='color: red;'>Almost Always</span>";
+				var defense = get_stat(team, "defense")[3];
 				if (canCp2 == -1 || canCp3 == -1) {
 					canCp2 = get_stat(team, "cp")[0];
 					canCp3 = get_stat(team, "cp")[1];
@@ -148,7 +128,7 @@
 				ds += "<p>Inspection Weight: <strong>" + weight + "</strong></p>";
 				ds += "<p>Can Do Rotational Control: <strong>" + cp2 + "</strong></p>";
 				ds += "<p>Can Do Positional Control: <strong>" + cp3 + "</strong></p>";
-				ds += "<p>Frequency of Defense: <strong>" + defense + "</strong></p>";
+				ds += "<p>Odds of Playing Defense in Match: " + defense + " (" + get_stat(team, "defense")[4] + "% of the time)</p>";
 				var c = "No"
 				ds += "<p>Number of Climbs: <strong>" + get_stat(team, "endgame")[2] + "</strong></p>";
 				column2.innerHTML += ds;

@@ -39,9 +39,13 @@
 				</select>
 			</fieldset>
 			<br>
-			<div style="text-align: center;">
+			<div class="defenseCheckbox" style="text-align: center;">
 				<label for="playDefense">Simulate defense?: </label>
-				<input type="checkbox" id="playDefense" name="playDefense"><br>
+				<div class="tooltip">
+					<span class="tooltiptext">When checked, simulator will choose a team on both alliances to play defense based on how often they attempt it. Defensive strength will be based on prior forms submitted for the team, and the defense will target the highest power cell scorer. Some of the defender's scoring will be reduced due to the time spent playing defense.</span>
+					<input type="checkbox" id="playDefense" name="playDefense">
+				</div>
+				<br>
 			</div>
 			<input type="submit" value="Begin match!">
 		</form>
