@@ -128,13 +128,22 @@
 		
 		// Update the rankings for best picks
 		function update_rankings() {
+			var availableTeamList = JSON.parse(localStorage.workingTeamList);
+			
 			// If the user chose custom, make the controls appear
 			var desire = document.getElementById("desire").value;
 			if (desire == "custom") {
 				document.getElementById("pickCustom").style.display = "block";
 			} else document.getElementById("pickCustom").style.display = "none";
 			
-			var availableTeamList = JSON.parse(localStorage.workingTeamList);
+			// Gray out chosen teams' control boxes
+			for (var i = 0; i < availableTeamList.length; i ++) {
+				var teamno = availableTeamList[i];
+				if (document.getElementById(teamno + "na").checked) {
+					document.getElementById(teamno + "box").style.backgroundColor = "#777777";
+				} else document.getElementById(teamno + "box").style.backgroundColor = "#E7E7E7";
+			}
+			
 			var workingTeamList = [];
 			switch (desire) {
 				case "rpi":
