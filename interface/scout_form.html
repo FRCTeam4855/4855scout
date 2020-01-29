@@ -25,7 +25,10 @@
 				<input id="inName" name="name" required>
 				<br>
 				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
-				<label for="teamno">Team #</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Enter the team number of the team you are currently scouting.</span>
+					<label for="teamno">Team #</label>
+				</div>
 				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
 				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
 				<div class="tooltip">
@@ -60,19 +63,13 @@
 					<span class="tooltiptext">Only mark if the team you're watching was the team that physically spun the wheel.</span>
 					<label for="cp2"><strong>Control Panel</strong> - Activated Stage 2 (rotational control)</label>
 				</div>
-				<select name="cp2" id="inCp2" required>
-					<option value="0">Did not complete</option>
-					<option value="1">Completed</option>
-				</select><br>
+				<input type="checkbox" name="cp2" id="inCp2"><br>
 				
 				<div class="tooltip">
 					<span class="tooltiptext">Only mark if the team you're watching was the team that physically spun the wheel.</span>
 					<label for="cp3"><strong>Control Panel</strong> - Activated Stage 3 (positional control)</label>
 				</div>
-				<select name="cp3" id="inCp3" required>
-					<option value="0">Did not complete</option>
-					<option value="1">Completed</option>
-				</select><br>
+				<input type="checkbox" name="cp3" id="inCp3"><br>
 			</fieldset>
 			
 			<fieldset>
@@ -103,7 +100,7 @@
 					<option value="2">Climbed</option>
 				</select><br>
 				<div class="tooltip">
-					<span class="tooltiptext">Mark this box if the team balanced the switch AND did it while another robot climbed.</span>
+					<span class="tooltiptext">Mark this box if the team balanced the climbing bar AND did it while another robot climbed.</span>
 					<label for="climblevel"><strong>Climb</strong> - Able to balance with a partner?</label>
 				</div>
 				<select name="climblevel" id="inClimblevel" required>
@@ -114,7 +111,6 @@
 			
 			<fieldset>
 				<h3 class="fieldsetHead">Miscellaneous</h3>
-				<input type="checkbox" name="goodpick" id="inGoodpick"><label for="goodpick">This team stands out to me and would be a <u>great pick</u> during alliance selections</label><br>
 				<input type="checkbox" name="penalties" id="inPenalties"><label for="penalties" style="color: #CA0033">I watched this team incur <strong>a great number of penalties</strong> OR incur a <strong>red/yellow card</strong> during this match</label><br>
 				<input type="checkbox" name="breakdown" id="inBreakdown"><label for="breakdown" style="color: #CA0033">I watched this team <strong>tip over, break down, or lose communications</strong> during this match</label><br><br>
 				<label for="comments">Do you have anything else to say about this robot that was not previously described? (300 character max):</label><br>

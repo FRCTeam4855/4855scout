@@ -46,7 +46,7 @@ function calculate_rpi(forms, factorPenalties, generateByEventKey, eventKey, gen
 		}
 		
 		levelPts += Number(forms[i].climblevel) * 15;
-		if (factorPenalties && forms[i].penalties == "true") adjustPenalties -= 17;
+		if (factorPenalties && forms[i].penalties == "true") adjustPenalties -= 5;
 	}
 	
 	autocrossPts /= formCount;

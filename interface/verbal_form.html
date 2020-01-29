@@ -24,9 +24,16 @@
 				</div>
 				<input id="inName" name="name" required><br>
 				<span id="teamname" style="float: right; text-align: center; margin-right: 12px; transform: translateY(10px);">Type a team number to verify their name here</span>
-				<label for="teamno">Team #</label>
+				<div class="tooltip">
+					<span class="tooltiptext">Enter the team number of the team you are currently scouting.</span>
+					<label for="teamno">Team #</label>
+				</div>
 				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
-				<label for="eventkey">Event Key</label><input id="inEventkey" autocomplete="off" required name="eventkey"><br>
+				<div class="tooltip">
+					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event)</span>
+					<label for="eventkey">Event Key</label>
+				</div>
+				<input id="inEventkey" autocomplete="off" required name="eventkey"><br>
 			</fieldset>
 			
 			<fieldset>
@@ -46,12 +53,16 @@
 			
 			<fieldset>
 				<h3 class="fieldsetHead">Gameplay</h3>
+				<!--
 				<label for="innerport"><strong>Power Port</strong> - Inner port hit rate</label>
 				<select name="innerport" id="inInnerport" required>
 					<option value="0">Unable to hit consistently</option>
 					<option value="1">Usually hits consistently</option>
-				</select><br>
-				<label for="defense"><strong>Defense</strong> - Willingness to perform</label>
+				</select><br>	we haven't used this data for anything yet. removing for now-->
+				<div class="tooltip">
+					<span class="tooltiptext">"Is your team willing to play defense or would you rather not?"</span>
+					<label for="defense"><strong>Defense</strong> - Willingness to perform</label>
+				</div>
 				<select name="defense" id="inDefense" required>
 					<option value="0">Complete incapability</option>
 					<option value="1">Would rather not</option>

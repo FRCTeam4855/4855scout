@@ -76,9 +76,6 @@ function form_print_data(form, element) {
 
 		// Checkmarks
 		displayString += '<ul class = "qualityList">';
-		if (form.goodpick == "true") {
-			displayString += 'This team was identified as a good team to choose during selections.<br>';
-		}
 		if (form.penalties == "true") {
 			displayString += '<span style="color: #CA0033">This team was identified as incurring great penalties OR a yellow/red card during this match.</span><br>';
 		}
@@ -91,9 +88,9 @@ function form_print_data(form, element) {
 		// Just list everything the team had to say
 		displayString += '<ul class="qualityList"><li class="rate">Attributes</li><li>Drivetrain: <strong>' + form.drivetrain + '</strong></li>';
 		displayString += '<li>Robot Weight: <strong>' + form.weight + ' lbs</strong></li>';
-		if (form.innerport == "0") {
+		/*if (form.innerport == "0") {
 			displayString += '<li>Team ' + teamno + ' indicated that they are <strong>inconsistent</strong> when attempting to hit the inner port.</li>';
-		} else displayString += '<li>Team ' + teamno + ' indicated that they <strong>frequently hit</strong> the inner port when shooting.</li>';
+		} else displayString += '<li>Team ' + teamno + ' indicated that they <strong>frequently hit</strong> the inner port when shooting.</li>';*/
 		switch (form.defense) {
 			case "0":
 				displayString += '<li>Defensive ability: <strong>Complete incapability</strong></li>';

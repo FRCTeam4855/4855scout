@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
 		var lowport = "", highport = "", cp2 = "", cp3 = "";
 		var defense = "", defenserate = "", defenseexp = "";
 		var climb = "", climblevel = "";
-		var goodpick = "", penalties = "", breakdown = "", comments = "";
+		var penalties = "", breakdown = "", comments = "";
 		
 		var drivetrain = "", weight = "", innerport = "";
 		
@@ -40,7 +40,7 @@ window.addEventListener('load', function() {
 			// Verbal form values
 			drivetrain = document.getElementById("inDrivetrain").value;
 			weight = document.getElementById("inWeight").value;
-			innerport = document.getElementById("inInnerport").value;
+			//innerport = document.getElementById("inInnerport").value;
 			defense = document.getElementById("inDefense").value;
 			cp2 = document.getElementById("inCp2").checked.toString();
 			cp3 = document.getElementById("inCp3").checked.toString();
@@ -55,7 +55,7 @@ window.addEventListener('load', function() {
 				"eventkey": eventkey,
 				"drivetrain": drivetrain,
 				"weight": weight,
-				"innerport": innerport,
+				//"innerport": innerport,
 				"defense": defense,
 				"cp2": cp2,
 				"cp3": cp3,
@@ -71,8 +71,10 @@ window.addEventListener('load', function() {
 
 			lowport = document.getElementById("inLowport").value;
 			highport = document.getElementById("inHighport").value;
-			cp2 = document.getElementById("inCp2").value;
-			cp3 = document.getElementById("inCp3").value;
+			cp2 = document.getElementById("inCp2").checked;
+			if (cp2) cp2 = "1"; else cp2 = "0";
+			cp3 = document.getElementById("inCp3").checked;
+			if (cp3) cp3 = "1"; else cp3 = "0";
 
 			defense = document.getElementById("inDefense").value;
 			defenserate = document.getElementById("inDefenserate").value;
@@ -81,7 +83,6 @@ window.addEventListener('load', function() {
 			climb = document.getElementById("inClimb").value;
 			climblevel = document.getElementById("inClimblevel").value;
 
-			goodpick = document.getElementById("inGoodpick").checked.toString();
 			penalties = document.getElementById("inPenalties").checked.toString();
 			breakdown = document.getElementById("inBreakdown").checked.toString();
 
@@ -106,7 +107,6 @@ window.addEventListener('load', function() {
 				"defenseexp": defenseexp,
 				"climb": climb,
 				"climblevel": climblevel,
-				"goodpick": goodpick,
 				"penalties": penalties,
 				"breakdown": breakdown,
 				"comments": comments
