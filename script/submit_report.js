@@ -15,18 +15,21 @@ window.addEventListener('load', function() {
 		
 		var drivetrain = "", weight = "", innerport = "";
 		
-		if (localStorage.source != "master") localStorage.init = true;
+		if (localStorage.source == "scout") localStorage.init = true;
 
 		// If there are no sheets, start counting them
-		if (localStorage.sheets) {
-			localStorage.sheets = Number(localStorage.sheets) + 1;
-		} else {
-			localStorage.sheets = 1;
+		if (localStorage.source != "edit") {
+			if (localStorage.sheets) {
+				localStorage.sheets = Number(localStorage.sheets) + 1;
+			} else {
+				localStorage.sheets = 1;
+			}
 		}
 		
 		// Universal information, generation of a unique form ID and the assignment of variables to form inputs
 		formtype = document.getElementById("formtype").value;
 		formID = Math.round(Math.random() * (999999 - 100000) + 100000);
+		if (localStorage.source == "edit" && localStorage.overrideEditID) formID = localStorage.overrideEditID;
 		name = document.getElementById("inName").value;
 		teamno = document.getElementById("inTeamno").value;
 		eventkey = document.getElementById("inEventkey").value;
@@ -119,20 +122,22 @@ window.addEventListener('load', function() {
 
 		// Start compiling a list of just form IDs if one doesn't exist yet, otherwise just add to the list
 		var formList, teamList;
-		if (localStorage.formList) {
-			formList = JSON.parse(localStorage.formList);
-			formList.push(formID);
-			localStorage.formList = JSON.stringify(formList);
+		if (localStorage.source != "edit") {
+			if (localStorage.formList) {
+				formList = JSON.parse(localStorage.formList);
+				formList.push(formID);
+				localStorage.formList = JSON.stringify(formList);
 
-			teamList = JSON.parse(localStorage.teamList);
-			teamList.push(teamno);
-			localStorage.teamList = JSON.stringify(teamList);
-		} else {
-			formList = [ formID ];
-			localStorage.formList = JSON.stringify(formList);
+				teamList = JSON.parse(localStorage.teamList);
+				teamList.push(teamno);
+				localStorage.teamList = JSON.stringify(teamList);
+			} else {
+				formList = [ formID ];
+				localStorage.formList = JSON.stringify(formList);
 
-			teamList = [ teamno ];
-			localStorage.teamList = JSON.stringify(teamList);
+				teamList = [ teamno ];
+				localStorage.teamList = JSON.stringify(teamList);
+			}
 		}
 		
 		// If we're submitting this report from the perspective of the master scouter then we do it a little differently
@@ -150,7 +155,16 @@ window.addEventListener('load', function() {
 				}
 			}
 			window.location.href = "master_main.html";
-		} else window.location.href = "scouter_main.html";
+		} else if (localStorage.source == "scout") window.location.href = "scouter_main.html"; else if (localStorage.source == "edit") {
+			// Redirect back to the team/form window
+			if (localStorage.masterInit) {
+				localStorage.currentTeam = teamno;
+				window.location.href = "master_view_team.html";
+			} else {
+				localStorage.currentID = "form-" + teamno + "-" + formID;
+				window.location.href = "scout_view_data.html";
+			}
+		}
 		
 		// At the conclusion of this process, we now have localStorage.form-XXXX-XXXXXX, which contains the form the user just filled out, as well as localStorage.formList, an array of IDs, localStorage.teamList, an array of teams which the formList correlates to, and localStorage.sheets, the number of entries that have been produced by the user. localStorage.init should also be ticked.
 	}

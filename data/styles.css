@@ -116,6 +116,7 @@ h2 a {
 	font-size: 110%;
 	padding-left: 0;
 	margin-top: 26px;
+	list-style-position: inside;
 }
 
 /*Display styles for items on a scouter's or a master's data sheet list*/
@@ -133,22 +134,37 @@ h2 a {
 	margin: 6px;
 	border-style: solid;
 	background-color: #D2D2D2;
-	width: 180px;
+	width: 170px;
 	vertical-align: middle;
 	height: 120px;
 }
 #scoutedList li h2, #masterTeamList h2 {
 	text-align: center;
-	font-size: 150%;
+	font-size: 140%;
 	padding: 0;
 	margin: 8px 0;
 }
 #scoutedList li h3, #masterTeamList h3 {
 	text-align: center;
-	font-size: 110%;
+	font-size: 105%;
 	font-style: italic;
 	font-weight: normal;
 	margin: 10px 0 12px;
+}
+.matchDupe {
+	border: 2px solid black;
+	border-radius: 16px;
+	background-color: #A34B56;
+	color: white;
+	width: 22px;
+	height: 22px;
+	display: block;
+	position: absolute;
+	font-size: 110%;
+	right: 62px;
+}
+.matchDupeIcon {
+	position: absolute;
 }
 #tbalink {
 	text-align: center;
@@ -266,6 +282,9 @@ h2 a {
 }
 
 /*Display styles for the scouting form element itself as well as the form to filter RPI rankings*/
+input {
+	border: 1px solid #353535;
+}
 #scout {
 	padding: 12px 24px;
 	margin: 0 8%;
@@ -314,6 +333,30 @@ h2 a {
 #scout input[type="submit"]:hover, #rpilist input[type="button"]:hover  {
 	background-color: #9f7cc3;
 	cursor: pointer;
+}
+.counterButtons {
+	display: inline-block;
+	transform: translateY(5px);
+	user-select: none;
+}
+.counterButtons .countButton {
+	border: 2px solid black;
+	width: 38px;
+	height: 13px;
+	line-height: 0;
+	text-align: center;
+	background-color: #764BA3;
+	color: white;
+}
+.counterButtons .countButton span {
+	line-height: 50%;
+}
+.counterButtons .countButton:hover {
+	cursor: pointer;
+	background-color: #9f7cc3;
+}
+.counterButtons .countButton:active {
+	background-color: #CAB7DE;
 }
 .fieldsetHead {
 	text-align: center;
@@ -481,9 +524,9 @@ h2 a {
 	text-align: center;
 	border: 2px solid #000;
 	background-color: #E7E7E7;
-	padding: 8px 0;
-	width: 150px;
-	height: 100px;
+	padding: 6px 0 8px;
+	width: 140px;
+	height: 90px;
 	vertical-align: middle;
 }
 .pickChoice h3 {

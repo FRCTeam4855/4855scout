@@ -31,6 +31,8 @@
 		<script>
 			function set_source() {
 				localStorage.source = "scout";
+				localStorage.editID = "";
+				localStorage.overrideEditID = "";
 				if (localStorage.masterInit) {
 					alert("WARNING: You already have data submitted as a master scouter. You must first reset your data there before you can submit data as a scouter.");
 					document.getElementById("NEWBUTTON").href = "/index.html";
@@ -68,8 +70,6 @@
 				localStorage.removeItem("teamList");
 				localStorage.removeItem("formList");
 			}
-			
-			
 		</script>
 	</body>
 </html>

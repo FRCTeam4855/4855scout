@@ -8,7 +8,7 @@
 	</head>
 	<body onload="pick_button()">
 		<h1>NEW VERBAL REPORT</h1>
-		<div class="buttonList" style="margin-bottom: 36px;">
+		<div class="buttonList" id="switchFormButton" style="margin-bottom: 36px;">
 			<div class="tooltip">
 				<span class="tooltiptext">Switch to the match form if you're collecting data by watching a team compete.</span>
 				<a href="scout_form.html">Match Form</a>
@@ -42,9 +42,9 @@
 				<select name="drivetrain" id="inDrivetrain" required>
 					<option value="Tank">Tank - Wheels</option>
 					<option value="Tank-Treaded">Tank - Tank Treads</option>
+					<option value="Tank Omni-Wheeled">Tank - Omni Wheels</option>
 					<option value="Mecanum">Mecanum</option>
 					<option value="Swerve">Swerve</option>
-					<option value="Crab">Crab</option>
 					<option value="Other">Other</option>
 				</select><br>
 				<label for="weight"><strong>Robot</strong> - Weight (lbs)</label>
@@ -95,6 +95,36 @@
 			if (localStorage.source == "scout") {
 				if (default_event_key != "") document.getElementById("inEventkey").value = default_event_key;
 				if (!allow_event_key_edits) document.getElementById("inEventkey").disabled = true;
+			} else if (localStorage.source == "edit") {
+				// Prefill form inputs with edit data and remove button to go to other form type
+				document.getElementById("switchFormButton").style.display = "none";
+				document.querySelector("input[type='submit']").value = "Finish Edits";
+				document.querySelector("body h1").innerHTML = "EDIT VERBAL REPORT";
+				document.querySelector("head title").innerHTML = "Edit Verbal Report :: 4855 Scouting";
+				var formID = localStorage.editID;
+				
+				// Parse out form
+				var form = JSON.parse(localStorage.getItem(formID));
+				
+				document.getElementById("inName").value = form.name;
+				document.getElementById("inTeamno").value = form.teamno;
+				document.getElementById("inEventkey").value = form.eventkey;
+				document.getElementById("inDrivetrain").value = form.drivetrain;
+				document.getElementById("inWeight").value = form.weight;
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inCp2").checked = form.cp2 == "1";
+				document.getElementById("inCp3").checked = form.cp3 == "1";
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inComments").value = form.comments;
+				append_team_name();
+				
+				if (localStorage.masterInit) {
+					document.getElementById("cancelButton").href = "master_view_team.html";
+					localStorage.currentTeam = localStorage.editTeamno;
+				} else {
+					document.getElementById("cancelButton").href = "scout_view_data.html";
+					localStorage.currentID = "form-" + localStorage.editTeamno + "-" + localStorage.overrideEditID;
+				}
 			}
 			
 			function append_team_name() {
@@ -104,6 +134,15 @@
 					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
 				} else val.innerHTML = "Type a team number to verify their name here";
 			}
+			
+			// When the window is closed, reset all resources
+			window.addEventListener("beforeunload", function() {
+				if (localStorage.source == "edit") {
+					localStorage.overrideEditID = "";
+					localStorage.editTeamno = "";
+					localStorage.editID = "";
+				}
+			});
 		</script>
 	</body>
 </html>

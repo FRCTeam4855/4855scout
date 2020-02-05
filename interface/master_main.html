@@ -12,7 +12,7 @@
 			<li>You have no teams in your database. Import some data by clicking below!</li>
 		</ul>
 		<div class="buttonList">
-			<a id="NEWBUTTON" href="scout_form.html" onclick="set_source()">Create new data</a>
+			<a id="NEWBUTTON" href="scout_form.html">Create new data</a>
 			<div class="tooltip">
 				<span class="tooltiptext">When scouters send you data or when you need to load any data you previously exported, it can be added to your database here.</span>
 				<a href="master_upload.html">Import data</a>
@@ -41,14 +41,28 @@
 	<script type="text/javascript" src="../script/get_version.js"></script>
 	<script type="text/javascript" src="../script/get_team_name.js"></script>
 	<script type="text/javascript" src="../script/export_data.js"></script>
+	<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
+	<script type="text/javascript" src="../script/get_match_key.js"></script>
 	<script>
-		function set_source() {
-			localStorage.source = "master";
+		var set_source = function(e) {
 			if (localStorage.init) {
 				alert("WARNING: You already have data submitted as a normal scouter. You must first reset your data there before you can submit data as a master scouter.");
 				document.getElementById("NEWBUTTON").href = "/index.html";
+				return 0;
+			}
+			if (localStorage.overrideEditID != "" && localStorage.overrideEditID) {
+				if (!confirm("It appears you have a form edit session active. Please close that window, as it can cause issues with your forms. If this message is appearing in error, click OK to continue.")) {
+					e.preventDefault();
+				}
+			} else {
+				localStorage.source = "master";
+				localStorage.editID = "";
+				localStorage.overrideEditID = "";
+				localStorage.editTeamno = "";
 			}
 		}
+		document.getElementById("NEWBUTTON").addEventListener("click", set_source, false);
+		
 		function load_data() {
 			if (localStorage.masterInit) {
 				// Show the team numbers that have data
@@ -60,12 +74,20 @@
 				var ds = "", fid = "";	// Display string, Form ID
 				for (let i = 0; i < teamsWithData.length; i ++) {
 					fid = teamsWithData[i];	// the team number in a string
-					var formNum = 0;
-					// Find out how many forms we have of this team in the database
-					for (let j = 0; j < teamList.length; j ++) {
-						if (fid == teamList[j]) formNum ++;
-					}
-					ds = "<li><h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
+					var forms = get_team_forms(fid);
+					var formNum = forms.length;
+					var matchKeys = [];
+					var duplicateMatch = false;
+					// Find out if there are any duplicate match forms in this team's database
+					forms.forEach(function(form) {
+						var matchKey = get_match_key(form.eventkey, form.matchno);
+						if (matchKeys.indexOf(matchKey) == -1) matchKeys.push(matchKey); else {
+							duplicateMatch = true;
+						}
+					});
+					ds = "<li>";
+					if (duplicateMatch) ds += "<div class='tooltip matchDupeIcon'><span class='tooltiptext'>This team has two forms from the same match. This can cause problems with match and stat simulation.</span><span class='matchDupe'>!</span></div>";
+					ds += "<h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
 					document.getElementById("masterTeamList").innerHTML += ds;
 				}
 				get_scouter_list();

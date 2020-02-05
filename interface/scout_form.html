@@ -8,7 +8,7 @@
 	</head>
 	<body onload="pick_button()">
 		<h1>NEW SCOUTING REPORT</h1>
-		<div class="buttonList" style="margin-bottom: 36px;">
+		<div class="buttonList" id="switchFormButton" style="margin-bottom: 36px;">
 			<div class="tooltip">
 				<span class="tooltiptext">Switch to the verbal form if you're collecting team data by talking to people in the pits.</span>
 				<a href="verbal_form.html">Verbal Form</a>
@@ -32,7 +32,7 @@
 				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
 				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
 				<div class="tooltip">
-					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event)</span>
+					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event for 2020)</span>
 					<label for="eventkey">Event Key</label>
 				</div>
 				<input id="inEventkey" autocomplete="off" required name="eventkey"><br>
@@ -46,18 +46,54 @@
 					<option value="1">Yes</option>
 				</select><br>
 				<label for="autolow"><strong>Autonomous</strong> - Cells in low goal</label>
-				<input name="autolow" id="inAutolow" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+				<input name="autolow" id="inAutolow" size="3" autocomplete="off" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increment countButton" onClick="incElement(document.getElementById('inAutolow'));">
+						<span>&#9206;</span>
+					</div>
+					<div class="decrement countButton" onClick="decElement(document.getElementById('inAutolow'));">
+						<span>&#9207;</span>
+					</div>
+				</div>
+				<br>
 				<label for="autohigh"><strong>Autonomous</strong> - Cells in high goal</label>
-				<input name="autohigh" id="inAutohigh" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+				<input name="autohigh" id="inAutohigh" autocomplete="off" size="3" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increment countButton" onClick="incElement(document.getElementById('inAutohigh'));">
+						<span>&#9206;</span>
+					</div>
+					<div class="decrement countButton" onClick="decElement(document.getElementById('inAutohigh'));">
+						<span>&#9207;</span>
+					</div>
+				</div>
+				<br>
 			</fieldset>
 			
 			<fieldset>
 				<h3 class="fieldsetHead">Teleoperated</h3>
 				<label for="lowport"><strong>Power Port</strong> - Cells in low goal</label>
-				<input name="lowport" id="inLowport" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+				<input name="lowport" id="inLowport" autocomplete="off" size="3" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increment countButton" onClick="incElement(document.getElementById('inLowport'));">
+						<span>&#9206;</span>
+					</div>
+					<div class="decrement countButton" onClick="decElement(document.getElementById('inLowport'));">
+						<span>&#9207;</span>
+					</div>
+				</div>
+				<br>
 
 				<label for="highport"><strong>Power Port</strong> - Cells in high goal</label>
-				<input name="highport" id="inHighport" autocomplete="off" type="number" value="0" min="0" max="99" required><br>
+				<input name="highport" id="inHighport" autocomplete="off" size="3" value="0" required>
+				<div class="counterButtons" unselectable="on">
+					<div class="increment countButton" onClick="incElement(document.getElementById('inHighport'));">
+						<span>&#9206;</span>
+					</div>
+					<div class="decrement countButton" onClick="decElement(document.getElementById('inHighport'));">
+						<span>&#9207;</span>
+					</div>
+				</div>
+				<br>
 				
 				<div class="tooltip">
 					<span class="tooltiptext">Only mark if the team you're watching was the team that physically spun the wheel.</span>
@@ -134,6 +170,45 @@
 			if (localStorage.source == "scout") {
 				if (default_event_key != "") document.getElementById("inEventkey").value = default_event_key;
 				if (!allow_event_key_edits) document.getElementById("inEventkey").disabled = true;
+			} else if (localStorage.source == "edit") {
+				// Prefill form inputs with edit data and remove button to go to other form type
+				document.getElementById("switchFormButton").style.display = "none";
+				document.querySelector("input[type='submit']").value = "Finish Edits";
+				document.querySelector("body h1").innerHTML = "EDIT SCOUTING REPORT";
+				document.querySelector("head title").innerHTML = "Edit Report :: 4855 Scouting";
+				var formID = localStorage.editID;
+				
+				// Parse out form
+				var form = JSON.parse(localStorage.getItem(formID));
+				
+				document.getElementById("inName").value = form.name;
+				document.getElementById("inTeamno").value = form.teamno;
+				document.getElementById("inMatchno").value = form.matchno;
+				document.getElementById("inEventkey").value = form.eventkey;
+				document.getElementById("inAutocross").value = form.autocross;
+				document.getElementById("inAutolow").value = form.autolow;
+				document.getElementById("inAutohigh").value = form.autohigh;
+				document.getElementById("inLowport").value = form.lowport;
+				document.getElementById("inHighport").value = form.highport;
+				document.getElementById("inCp2").checked = form.cp2 == "1";
+				document.getElementById("inCp3").checked = form.cp3 == "1";
+				document.getElementById("inDefense").value = form.defense;
+				document.getElementById("inDefenseexp").value = form.defenseexp;
+				document.getElementById("inDefenserate").value = form.defenserate;
+				document.getElementById("inClimb").value = form.climb;
+				document.getElementById("inClimblevel").value = form.climblevel;
+				document.getElementById("inPenalties").checked = form.penalties == "true";
+				document.getElementById("inBreakdown").checked = form.breakdown == "true";
+				document.getElementById("inComments").value = form.comments;
+				append_team_name();
+				
+				if (localStorage.masterInit) {
+					document.getElementById("cancelButton").href = "master_view_team.html";
+					localStorage.currentTeam = localStorage.editTeamno;
+				} else {
+					document.getElementById("cancelButton").href = "scout_view_data.html";
+					localStorage.currentID = "form-" + localStorage.editTeamno + "-" + localStorage.overrideEditID;
+				}
 			}
 			
 			function append_team_name() {
@@ -143,6 +218,25 @@
 					val.innerHTML = "<h3 style='margin: 0;'>Team " + teamno + "</h3><br>" + get_team_name(teamno);
 				} else val.innerHTML = "Type a team number to verify their name here";
 			}
+			
+			// Increments a specific form value
+			function incElement(elm) {
+				if (!Number.isInteger(Number(elm.value))) elm.value = "1"; else elm.value = Number(elm.value) + 1;
+			}
+			
+			// Decrements a specific form value
+			function decElement(elm) {
+				if (!Number.isInteger(Number(elm.value)) || Number(elm.value) <= 0) elm.value = "0"; else elm.value = Number(elm.value) - 1;
+			}
+			
+			// When the window is closed, reset all resources
+			window.addEventListener("beforeunload", function() {
+				if (localStorage.source == "edit") {
+					localStorage.overrideEditID = "";
+					localStorage.editTeamno = "";
+					localStorage.editID = "";
+				}
+			});
 		</script>
 	</body>
 </html>

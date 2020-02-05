@@ -112,6 +112,9 @@ function form_print_data(form, element) {
 		if (form.comments != "") displayString += '<p>Comments: <i>"' + form.comments + '"</i></p>';
 	}
 	
+	// Edit form link
+	displayString += '<a href="#" onclick="edit_form(' + formID + ', ' + teamno + ')">Edit this form</a><br>';
+	
 	// Delete form link
 	displayString += '<a href="#" onclick="delete_form(' + formID + ')">Delete this form</a>';
 	
@@ -123,6 +126,7 @@ function form_print_data(form, element) {
 
 // Erase a form from storage
 function delete_form(formID) {
+	if (!confirm("This action cannot be undone. Please confirm before deleting the form.")) return 0;
 	// The boys are back, parse 'em
 	var teamList = JSON.parse(localStorage.teamList);
 	var formList = JSON.parse(localStorage.formList);
@@ -156,6 +160,20 @@ function delete_form(formID) {
 				window.location.href = "master_main.html"; 
 			} else window.location.href = "scouter_main.html";
 		}
+		return 1;
 	} else alert("Somehow that form doesn't exist and the operation could not be completed. Reload the page and try again.");
 }
 
+// Edit a form's contents. This will redirect to the scout form interface and all forms will be prefilled with prior information
+function edit_form(formID, teamno) {
+	if (localStorage.overrideEditID != "" && localStorage.overrideEditID) {
+		if (!confirm("It appears you have another form edit session active. Please close this session, as this can cause issues with your forms. If this message is appearing in error, click OK to continue.")) return 0;
+	}
+	var editID = "form-" + teamno + "-" + formID;
+	var form = JSON.parse(localStorage.getItem(editID));
+	localStorage.source = "edit";
+	localStorage.editID = editID;
+	localStorage.overrideEditID = formID;
+	localStorage.editTeamno = teamno;
+	if (form.formtype == "match") window.location.href = "scout_form.html"; else window.location.href = "verbal_form.html";
+}
