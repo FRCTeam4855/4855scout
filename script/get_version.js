@@ -5,5 +5,5 @@ function get_version() {
 
 // Get the version number of this scouter as a string
 function get_version_string() {
-	return "2020.4";
+	return "2020.4.1";
 }

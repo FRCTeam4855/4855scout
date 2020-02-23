@@ -67,8 +67,8 @@ window.addEventListener('load', function() {
 		} else {
 			// Match form values
 			matchno = document.getElementById("inMatchno").value;
-
-			autocross = document.getElementById("inAutocross").value;
+			
+			if (document.getElementById("inAutocross").checked) autocross = "1"; else autocross = "0";
 			autolow = document.getElementById("inAutolow").value;
 			autohigh = document.getElementById("inAutohigh").value;
 

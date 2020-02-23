@@ -15,7 +15,7 @@
 			<a id="NEWBUTTON" href="scout_form.html">Create new data</a>
 			<div class="tooltip">
 				<span class="tooltiptext">When scouters send you data or when you need to load any data you previously exported, it can be added to your database here.</span>
-				<a href="master_upload.html">Import data</a>
+				<a id="IMPORTBUTTON" href="master_upload.html">Import data</a>
 			</div>
 			<div class="tooltip">
 				<span class="tooltiptext">This button will download a file onto your hard drive containing all the data currently in your database. Use this if you'd like to save your progress for later. The file you download can also be renamed if you need to organize by event.</span>
@@ -61,7 +61,15 @@
 				localStorage.editTeamno = "";
 			}
 		}
+		var checkRegInit = function(e) {
+			if (localStorage.init) {
+				alert("WARNING: You already have data submitted as a normal scouter. You must first reset your data there before you can import data as a master scouter.");
+				document.getElementById("IMPORTBUTTON").href = "/index.html";
+				return 0;
+			}
+		}
 		document.getElementById("NEWBUTTON").addEventListener("click", set_source, false);
+		document.getElementById("IMPORTBUTTON").addEventListener("click", checkRegInit, false);
 		
 		function load_data() {
 			if (localStorage.masterInit) {
