@@ -85,18 +85,20 @@
 				ds += "<p>Avg. Teleop Cells Scored: <strong>" + get_stat(team, "powerport")[1] + "</strong></p>";
 				ds += "<p>Most Common Endgame: <strong>" + get_stat(team, "endgame")[0] + "</strong></p>";
 				var dss  = get_stat(team, "defense")[2];
+				ds += "<p>Number of Climbs: <strong>" + get_stat(team, "endgame")[2] + "</strong> successful of <strong>" + get_stat(team, "endgame")[3] + "</strong> attempts</p>";
 				ds += "<p>Defensive Strength: " + dss + "</p>";
 				ds += "<p>Times Broken Down: <strong>" + breakdowns + "</strong></p>";
 				ds += "<p>Times Drawn Significant Penalties: <strong>" + penalties + "</strong></p>";
 				column1.innerHTML += ds;
 				
 				// Attributes/abilities column
-				var drivetrain = "?", weight = "?", defense = "?", cp2 = "?", cp3 = "?";
+				var drivetrain = "?", trench = "?", weight = "?", defense = "?", cp2 = "?", cp3 = "?";
 				var canCp2 = -1, canCp3 = -1;
 				for (var f = 0; f < forms.length; f ++) {	// forms was defined earlier
 					var form = forms[f];
 					if (form.formtype == "verbal") {
 						drivetrain = form.drivetrain;
+						if (form.trench == "true") trench = "Yes"; else trench = "No";
 						weight = form.weight + "lbs";
 						canCp2 = form.cp2;
 						canCp3 = form.cp3;
@@ -126,11 +128,12 @@
 				//ds += "<p>: <strong>" + v + "</strong></p>";
 				ds += "<p>Drivetrain: <strong>" + drivetrain + "</strong></p>";
 				ds += "<p>Inspection Weight: <strong>" + weight + "</strong></p>";
+				ds += "<p>Fits Under Trench: <strong>" + trench + "</strong></p>";
 				ds += "<p>Can Do Rotational Control: <strong>" + cp2 + "</strong></p>";
 				ds += "<p>Can Do Positional Control: <strong>" + cp3 + "</strong></p>";
 				ds += "<p>Odds of Playing Defense in Match: " + defense + " (" + get_stat(team, "defense")[4] + "% of the time)</p>";
 				var c = "No"
-				ds += "<p>Number of Climbs: <strong>" + get_stat(team, "endgame")[2] + "</strong></p>";
+				
 				column2.innerHTML += ds;
 				
 				document.getElementById("rpiInfo").innerHTML += "<h5>Total # of forms for team: " + forms.length + "</h5>";

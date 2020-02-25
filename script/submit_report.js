@@ -10,10 +10,10 @@ window.addEventListener('load', function() {
 		var autocross = "", autolow = "", autohigh = "";
 		var lowport = "", highport = "", cp2 = "", cp3 = "";
 		var defense = "", defenserate = "", defenseexp = "";
-		var climb = "", climblevel = "";
-		var penalties = "", breakdown = "", comments = "";
+		var climb = "", climbattempt = "", climblevel = "";
+		var inner = "", penalties = "", breakdown = "", comments = "";
 		
-		var drivetrain = "", weight = "", innerport = "";
+		var drivetrain = "", trench = "", weight = "";
 		
 		if (localStorage.source == "scout") localStorage.init = true;
 
@@ -43,6 +43,7 @@ window.addEventListener('load', function() {
 			// Verbal form values
 			drivetrain = document.getElementById("inDrivetrain").value;
 			weight = document.getElementById("inWeight").value;
+			trench = document.getElementById("inTrench").checked.toString();
 			//innerport = document.getElementById("inInnerport").value;
 			defense = document.getElementById("inDefense").value;
 			cp2 = document.getElementById("inCp2").checked.toString();
@@ -58,6 +59,7 @@ window.addEventListener('load', function() {
 				"eventkey": eventkey,
 				"drivetrain": drivetrain,
 				"weight": weight,
+				"trench": trench,
 				//"innerport": innerport,
 				"defense": defense,
 				"cp2": cp2,
@@ -84,8 +86,10 @@ window.addEventListener('load', function() {
 			defenseexp = document.getElementById("inDefenseexp").value;
 
 			climb = document.getElementById("inClimb").value;
+			climbattempt = document.getElementById("inClimbattempt").checked.toString();
 			climblevel = document.getElementById("inClimblevel").value;
-
+			
+			inner = document.getElementById("inInner").checked.toString();
 			penalties = document.getElementById("inPenalties").checked.toString();
 			breakdown = document.getElementById("inBreakdown").checked.toString();
 
@@ -109,7 +113,9 @@ window.addEventListener('load', function() {
 				"defenserate": defenserate,
 				"defenseexp": defenseexp,
 				"climb": climb,
+				"climbattempt": climbattempt,
 				"climblevel": climblevel,
+				"inner": inner,
 				"penalties": penalties,
 				"breakdown": breakdown,
 				"comments": comments

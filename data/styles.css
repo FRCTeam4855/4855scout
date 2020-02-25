@@ -151,6 +151,10 @@ h2 a {
 	font-weight: normal;
 	margin: 10px 0 12px;
 }
+#sheetsNo {
+	text-align: center;
+	font-size: 85%;
+}
 .matchDupe {
 	border: 2px solid black;
 	border-radius: 16px;
@@ -299,6 +303,9 @@ input {
 #scout label, #scout input, #scout textarea, #scout select, #rpilist label, #rpilist select, #rpilist input {
 	margin: 6px;
 	display: inline;
+}
+#scout label , #scout input[type="checkbox"]{
+	margin: 10px 6px;
 }
 #scout input {
 	box-shadow: inset 0 0 0.25rem #fff;

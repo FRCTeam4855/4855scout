@@ -70,12 +70,18 @@ function form_print_data(form, element) {
 		displayString += '<ul class = "qualityList"><li class="rate">Climb Performance</li><li>Climb Outcome: <strong>' + climb + '</strong></li>';
 		let climblevel = "No";
 		if (form.climblevel == "1") climblevel = "Yes";
+		if (form.climbattempt == "true") {
+			displayString += '<li>This team attempted a climb but was unsuccessful.</li>';
+		}
 		displayString += '<li>Leveled with a partner?: <strong>' + climblevel + '</strong></li></ul>';
 
 		if (form.comments != "") displayString += '<p>Comments: <i>"' + form.comments + '"</i></p>';
 
 		// Checkmarks
 		displayString += '<ul class = "qualityList">';
+		if (form.penalties == "true") {
+			displayString += '<span>This team was able to score a notable percentage of balls into the inner port during this match.</span><br>';
+		}
 		if (form.penalties == "true") {
 			displayString += '<span style="color: #CA0033">This team was identified as incurring great penalties OR a yellow/red card during this match.</span><br>';
 		}
@@ -88,6 +94,11 @@ function form_print_data(form, element) {
 		// Just list everything the team had to say
 		displayString += '<ul class="qualityList"><li class="rate">Attributes</li><li>Drivetrain: <strong>' + form.drivetrain + '</strong></li>';
 		displayString += '<li>Robot Weight: <strong>' + form.weight + ' lbs</strong></li>';
+		if (form.trench == "true") {
+			displayString += '<li>This robot is <strong>able</strong> to fit underneath the trench.</li>';
+		} else {
+			displayString += '<li>This robot is <strong>unable</strong> to fit underneath the trench.</li>';
+		}
 		/*if (form.innerport == "0") {
 			displayString += '<li>Team ' + teamno + ' indicated that they are <strong>inconsistent</strong> when attempting to hit the inner port.</li>';
 		} else displayString += '<li>Team ' + teamno + ' indicated that they <strong>frequently hit</strong> the inner port when shooting.</li>';*/

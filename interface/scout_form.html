@@ -6,7 +6,7 @@
 		<script type="text/javascript"></script>
 		<link href="../data/styles.css" rel="stylesheet" type="text/css">
 	</head>
-	<body onload="pick_button()">
+	<body onload="pick_button(); climbInputDisabling(); defenseInputDisabling();">
 		<h1>NEW SCOUTING REPORT</h1>
 		<div class="buttonList" id="switchFormButton" style="margin-bottom: 36px;">
 			<div class="tooltip">
@@ -29,7 +29,7 @@
 					<span class="tooltiptext">Enter the team number of the team you are currently scouting.</span>
 					<label for="teamno">Team #</label>
 				</div>
-				<input id="inTeamno" name="teamno" autocomplete="off" required onChange="append_team_name()"><br>
+				<input id="inTeamno" name="teamno" autocomplete="off" required onInput="append_team_name()"><br>
 				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
 				<div class="tooltip">
 					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event for 2020)</span>
@@ -108,7 +108,7 @@
 			<fieldset>
 				<h3 class="fieldsetHead">Defense</h3>
 				<label for="defense"><strong>Defense</strong> - Did they attempt defense?</label>
-				<select name="defense" id="inDefense" required>
+				<select name="defense" id="inDefense" onChange="defenseInputDisabling()">
 					<option value="0">No</option>
 					<option value="1">Yes</option>
 				</select><br>
@@ -127,11 +127,16 @@
 					<span class="tooltiptext">Mark "None" if the team failed to reach the rendezvous point. Mark "Parked" if the team's climb failed, or if they just sat in the rendezvous point.</span>
 					<label for="climb"><strong>Climb</strong> - Success</label>
 				</div>
-				<select name="climb" id="inClimb" required>
+				<select name="climb" id="inClimb" onChange="climbInputDisabling()">
 					<option value="0">None</option>
 					<option value="1">Parked</option>
 					<option value="2">Climbed</option>
 				</select><br>
+				<div class="tooltip">
+					<span class="tooltiptext">Check this box if the team clearly TRIED to climb but was unsuccessful due to mechanism failure, external influence, etc.</span>
+					<label for="climbattempt"><strong>Climb</strong> - Failed attempt?</label>
+				</div>
+				<input type="checkbox" name="climbattempt" id="inClimbattempt"><br>
 				<div class="tooltip">
 					<span class="tooltiptext">Mark this box if the team balanced the climbing bar AND did it while another robot climbed.</span>
 					<label for="climblevel"><strong>Climb</strong> - Able to balance with a partner?</label>
@@ -144,6 +149,7 @@
 			
 			<fieldset>
 				<h3 class="fieldsetHead">Miscellaneous</h3>
+				<input type="checkbox" name="inner" id="inInner"><label for="inner">I watched this team score a <strong>notable number</strong> of power cells into the <strong>inner port</strong> during this match (approximately 40% of shots or more went into inner port)</label><br>
 				<input type="checkbox" name="penalties" id="inPenalties"><label for="penalties" style="color: #CA0033">I watched this team incur <strong>a great number of penalties</strong> OR incur a <strong>red/yellow card</strong> during this match</label><br>
 				<input type="checkbox" name="breakdown" id="inBreakdown"><label for="breakdown" style="color: #CA0033">I watched this team <strong>tip over, break down, or lose communications</strong> during this match</label><br><br>
 				<label for="comments">Do you have anything else to say about this robot that was not previously described? (300 character max):</label><br>
@@ -180,9 +186,10 @@
 				
 				document.getElementById("inName").value = form.name;
 				document.getElementById("inTeamno").value = form.teamno;
+				document.getElementById("inTeamno").disabled = true;
 				document.getElementById("inMatchno").value = form.matchno;
 				document.getElementById("inEventkey").value = form.eventkey;
-				document.getElementById("inAutocross").value = form.autocross;
+				document.getElementById("inAutocross").value = form.autocross == "1";
 				document.getElementById("inAutolow").value = form.autolow;
 				document.getElementById("inAutohigh").value = form.autohigh;
 				document.getElementById("inLowport").value = form.lowport;
@@ -194,10 +201,13 @@
 				document.getElementById("inDefenserate").value = form.defenserate;
 				document.getElementById("inClimb").value = form.climb;
 				document.getElementById("inClimblevel").value = form.climblevel;
+				document.getElementById("inClimbattempt").value = form.climbattempt == "true";
 				document.getElementById("inPenalties").checked = form.penalties == "true";
 				document.getElementById("inBreakdown").checked = form.breakdown == "true";
 				document.getElementById("inComments").value = form.comments;
 				append_team_name();
+				climbInputDisabling();
+				defenseInputDisabling();
 				
 				if (localStorage.masterInit) {
 					document.getElementById("cancelButton").href = "master_view_team.html";
@@ -224,6 +234,38 @@
 			// Decrements a specific form value
 			function decElement(elm) {
 				if (!Number.isInteger(Number(elm.value)) || Number(elm.value) <= 0) elm.value = "0"; else elm.value = Number(elm.value) - 1;
+			}
+			
+			// Changes ability to edit balance/failed climb fields depending on the value of the climbing field
+			function climbInputDisabling() {
+				var climbVal = document.getElementById("inClimb").value;
+				if (climbVal == "2") {
+					// CLIMB was marked
+					document.getElementById("inClimbattempt").checked = false;
+					document.getElementById("inClimbattempt").disabled = true;
+					document.getElementById("inClimblevel").disabled = false;
+				} else {
+					// NO CLIMB was marked
+					document.getElementById("inClimbattempt").disabled = false;
+					document.getElementById("inClimblevel").disabled = true;
+					document.getElementById("inClimblevel").value = "0";
+				}
+			}
+			
+			function defenseInputDisabling() {
+				var defenseVal = document.getElementById("inDefense").value;
+				if (defenseVal == "1") {
+					// DEFENSE was marked
+					document.getElementById("inDefenserate").disabled = false;
+					document.getElementById("inDefenseexp").disabled = false;
+					document.getElementById("inDefenserate").value = "1";
+				} else {
+					// NO DEFENSE was marked
+					document.getElementById("inDefenserate").value = "0";
+					document.getElementById("inDefenseexp").value = "";
+					document.getElementById("inDefenserate").disabled = true;
+					document.getElementById("inDefenseexp").disabled = true;
+				} 
 			}
 			
 			// When the window is closed, reset all resources

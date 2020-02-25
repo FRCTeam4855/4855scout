@@ -11,6 +11,7 @@
 		<ul id="masterTeamList">
 			<li>You have no teams in your database. Import some data by clicking below!</li>
 		</ul>
+		<h4 id="sheetsNo"></h4>
 		<div class="buttonList">
 			<a id="NEWBUTTON" href="scout_form.html">Create new data</a>
 			<div class="tooltip">
@@ -98,8 +99,9 @@
 					ds += "<h2>" + fid + "</h2><h3>" + get_team_name(fid) + "</h3><a href='master_view_team.html' onclick='set_view_data(" + '"' + fid + '"' + ")'>" + formNum + " form(s) for this team</li>";
 					document.getElementById("masterTeamList").innerHTML += ds;
 				}
+				document.getElementById("sheetsNo").innerHTML = "Total number of forms: " + localStorage.sheets;
 				get_scouter_list();
-			}
+			} else document.getElementById("sheetsNo").display = "none";
 		}
 		function set_view_data(id) {
 			localStorage.currentTeam = id;
