@@ -189,7 +189,7 @@
 				document.getElementById("inTeamno").disabled = true;
 				document.getElementById("inMatchno").value = form.matchno;
 				document.getElementById("inEventkey").value = form.eventkey;
-				document.getElementById("inAutocross").value = form.autocross == "1";
+				document.getElementById("inAutocross").checked = form.autocross == "1";
 				document.getElementById("inAutolow").value = form.autolow;
 				document.getElementById("inAutohigh").value = form.autohigh;
 				document.getElementById("inLowport").value = form.lowport;
@@ -202,6 +202,7 @@
 				document.getElementById("inClimb").value = form.climb;
 				document.getElementById("inClimblevel").value = form.climblevel;
 				document.getElementById("inClimbattempt").value = form.climbattempt == "true";
+				document.getElementById("inInner").checked = form.inner == "true";
 				document.getElementById("inPenalties").checked = form.penalties == "true";
 				document.getElementById("inBreakdown").checked = form.breakdown == "true";
 				document.getElementById("inComments").value = form.comments;

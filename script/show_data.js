@@ -79,7 +79,7 @@ function form_print_data(form, element) {
 
 		// Checkmarks
 		displayString += '<ul class = "qualityList">';
-		if (form.penalties == "true") {
+		if (form.inner == "true") {
 			displayString += '<span>This team was able to score a notable percentage of balls into the inner port during this match.</span><br>';
 		}
 		if (form.penalties == "true") {
