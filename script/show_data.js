@@ -146,7 +146,9 @@ function delete_form(formID) {
 		teamsWithData = JSON.parse(localStorage.teamsWithData);
 	}
 	var deleteIndex = formList.indexOf(formID);
-	if (deleteIndex > -1) {
+	var backupDeleteIndex = formList.indexOf(formID.toString());
+	if (deleteIndex > -1 || backupDeleteIndex > -1) {
+		if (deleteIndex == -1) deleteIndex = backupDeleteIndex;
 		var teamno = teamList[deleteIndex];
 		teamList.splice(deleteIndex, 1);
 		formList.splice(deleteIndex, 1);
