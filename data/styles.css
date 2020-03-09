@@ -289,6 +289,28 @@ h2 a {
 input {
 	border: 1px solid #353535;
 }
+/* Searchable dropdown styles */
+.choices {
+	margin: 6px;
+	margin-bottom: -10px !important;
+	width: 300px;
+	height: 24px;
+	border: 1px solid #353535;
+	display: inline-block;
+}
+.choices__inner {
+	padding-top: 3.5px;
+	min-height: 0px;
+	width: 283px;
+	border-radius: 0px;
+}
+.choices__list--single {
+	padding: 0px;
+}
+.choices__list--dropdown .choices__item--selectable {
+	padding-right: 0px;
+}
+
 #scout {
 	padding: 12px 24px;
 	margin: 0 8%;
