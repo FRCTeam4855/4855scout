@@ -252,11 +252,12 @@ function simulate_match() {
 		// Simulate endgame scoring
 		// Red endgame
 		var balancers = 0;
+		var climbers = 0;
 		for (i = 0; i < red.length; i ++) {
-			if (red[i].endgame[0] == "Parked") redEndgame += 5;
+			if (red[i].endgame[0] == "Parked") redEndgame += 5; else if (red[i].endgame[0] == "Hanging") climbers ++;
 			if (red[i].endgame[1] == true) balancers ++;
 		}
-		if (balancers < 2) {
+		if (balancers < 2 || (balancers < 3 && climbers == 3)) {
 			// No balancing, just take all climb points available
 			for (i = 0; i < red.length; i ++) {
 				if (red[i].endgame[0] == "Hanging") redEndgame += 25;
@@ -278,11 +279,12 @@ function simulate_match() {
 
 		// Blue endgame
 		balancers = 0;
+		climbers = 0;
 		for (i = 0; i < blue.length; i ++) {
-			if (blue[i].endgame[0] == "Parked") blueEndgame += 5;
+			if (blue[i].endgame[0] == "Parked") blueEndgame += 5; else if (blue[i].endgame[0] == "Hanging") climbers ++;
 			if (blue[i].endgame[1] == true) balancers ++;
 		}
-		if (balancers < 2) {
+		if (balancers < 2 || (balancers < 3 && climbers == 3)) {
 			// No balancing, just take all climb points available
 			for (i = 0; i < blue.length; i ++) {
 				if (blue[i].endgame[0] == "Hanging") blueEndgame += 25;
@@ -476,6 +478,9 @@ function simDisplayTeam(alliance, index) {
 		ds += "<p>RPI: " + teamStats.rpi[0] + " (" + teamStats.rpi[1] + ")</p>";
 		ds += "<p># of Auto Cells Scored: " + teamStats.auto[1] + "</p>";
 		ds += "<p># of Teleop Cells Scored: " + teamStats.powerport[1] + "</p>";
+		var autocross;
+		if (teamStats.auto[2]) autocross = "Yes"; else autocross = "No";
+		ds += "<p>Autocross: " + autocross + "</p>";
 		ds += "<p>Endgame Status: " + teamStats.endgame[0] + "</p>";
 		
 		// Print defensive statistics

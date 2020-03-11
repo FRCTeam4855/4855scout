@@ -127,7 +127,7 @@ function form_print_data(form, element) {
 	displayString += '<a href="#" onclick="edit_form(' + formID + ', ' + teamno + ')">Edit this form</a><br>';
 	
 	// Delete form link
-	displayString += '<a href="#" onclick="delete_form(' + formID + ')">Delete this form</a>';
+	displayString += '<a href="#" onclick="delete_form(' + formID + ', true)">Delete this form</a>';
 	
 	// Finishing it off
 	displayString += "</article>"
@@ -136,8 +136,9 @@ function form_print_data(form, element) {
 }
 
 // Erase a form from storage
-function delete_form(formID) {
-	if (!confirm("This action cannot be undone. Please confirm before deleting the form.")) return 0;
+function delete_form(formID, confirming) {
+	if (confirming)
+		if (!confirm("This action cannot be undone. Please confirm before deleting the form.")) return 0;
 	// The boys are back, parse 'em
 	var teamList = JSON.parse(localStorage.teamList);
 	var formList = JSON.parse(localStorage.formList);

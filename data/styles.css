@@ -98,10 +98,10 @@ h2 a {
 #buttonList a:hover, .buttonList a:hover {
 	background-color: #9f7cc3;
 }
-.buttonList .clearButton {
+.buttonList .clearButton, #buttonList .clearButton {
 	background-color: #A34B56;
 }
-.buttonList .clearButton:hover {
+.buttonList .clearButton:hover, #buttonList .clearButton:hover {
 	background-color: #C37C7C;
 }
 #rpiRankInfo {

@@ -30,8 +30,8 @@ window.addEventListener('load', function() {
 		formtype = document.getElementById("formtype").value;
 		formID = Math.round(Math.random() * (999999 - 100000) + 100000);
 		if (localStorage.source == "edit" && localStorage.overrideEditID) formID = localStorage.overrideEditID;
-		name = document.getElementById("inName").value;
-		teamno = document.getElementById("inTeamno").value;
+		name = document.getElementById("inName").value.trim();
+		teamno = document.getElementById("inTeamno").value.trim();	// team numbers are handled as strings
 		eventkey = document.getElementById("inEventkey").value;
 		var d = new Date();
 		var m = d.getMonth() + 1;
@@ -68,7 +68,7 @@ window.addEventListener('load', function() {
 			};
 		} else {
 			// Match form values
-			matchno = document.getElementById("inMatchno").value;
+			matchno = document.getElementById("inMatchno").value.trim();
 			
 			if (document.getElementById("inAutocross").checked) autocross = "1"; else autocross = "0";
 			autolow = document.getElementById("inAutolow").value;

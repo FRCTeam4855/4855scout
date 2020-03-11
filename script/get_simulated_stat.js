@@ -5,7 +5,7 @@ function get_stat(teamno, stat) {
 		case "rpi":
 			return calculate_rpi(forms, false, false, "", false, "");
 		case "auto":
-			// Returns an array with points scored and # pieces scored
+			// Returns an array with points scored, # pieces scored, and true/false for autocross
 			var autocross = 0, autolow = 0, autohigh = 0;
 			var allForms = 0;
 			for (var i = 0; i < forms.length; i ++) {
@@ -19,7 +19,7 @@ function get_stat(teamno, stat) {
 			if ((autocross * 5) / allForms > 3.6) autocross = 5; else autocross = 0;
 			autolow = Math.round(autolow / allForms);
 			autohigh = Math.round(autohigh / allForms);
-			if (allForms > 0) return [autocross + autolow * 2 + autohigh * 4, autolow + autohigh]; else return ["-", "-", "-"];
+			if (allForms > 0) return [autocross + autolow * 2 + autohigh * 4, autolow + autohigh, autocross == 5]; else return ["-", "-", "-"];
 		case "powerport":
 			// Returns an array with points scored, # pieces scored, and the percent of goals that are high goals
 			var lowport = 0, highport = 0;

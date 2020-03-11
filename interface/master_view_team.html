@@ -25,6 +25,7 @@
 			
 		</div>
 		<div id="buttonList">
+			<a class="clearButton" href="#" onclick="delete_team()">Delete all</a>
 			<a href="master_main.html">Go back</a>
 		</div>
 		
@@ -36,9 +37,11 @@
 		<script type="text/javascript" src="../script/get_simulated_stat.js"></script>
 		<script type="text/javascript" src="../script/get_all_team_forms.js"></script>
 		<script>
+			var team;
+			
 			function load_data() {
 				// Display team number and blue alliance link
-				var team = localStorage.currentTeam;
+				team = localStorage.currentTeam;
 				document.getElementById("reportDisplay").innerHTML += team;
 				document.getElementById("tbalink").innerHTML = "<a href=" + '"https://www.thebluealliance.com/team/' + team + '" target="_blank">Find team ' + team + " on The Blue Alliance</a>";
 				
@@ -137,6 +140,17 @@
 				column2.innerHTML += ds;
 				
 				document.getElementById("rpiInfo").innerHTML += "<h5>Total # of forms for team: " + forms.length + "</h5>";
+			}
+			
+			function delete_team() {
+				if (prompt("This action will delete every form in the database for this team. Please type in their team number to confirm you would like to do this.") == team) {
+					// Well don't say I didn't warn ya lol
+					var forms = get_team_forms(team);
+					forms.forEach(function(form) {
+						delete_form(form.formID, false);
+					});
+					window.location.href = "master_main.html";
+				} else return 0;
 			}
 		</script>
 	</body>

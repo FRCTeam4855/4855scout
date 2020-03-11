@@ -65,19 +65,17 @@ function calculate_rpi(forms, factorPenalties, generateByEventKey, eventKey, gen
 	rpi = Math.round(rpi * 10) / 10.0;	// Round to nearest tenth if necessary
 	
 	var rpiQuality = "";
-	if (rpi < 22)
+	if (rpi < 8)
 		rpiQuality = "Very Poor";
-	else if (rpi < 34)
+	else if (rpi < 16)
 		rpiQuality = "Poor";
-	else if (rpi < 46)
-		rpiQuality = "Below Average";
-	else if (rpi < 59)
+	else if (rpi < 28)
 		rpiQuality = "Average";
-	else if (rpi < 80)
+	else if (rpi < 55)
 		rpiQuality = "Good";
-	else if (rpi < 104)
+	else if (rpi < 79)
 		rpiQuality = "Very Good";
-	else if (rpi < 125)
+	else if (rpi < 100)
 		rpiQuality = "Excellent";
 	else rpiQuality = "Godly";
 	
