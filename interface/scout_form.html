@@ -4,7 +4,10 @@
 		<meta charset="utf-8">
 		<title>New Report :: 4855 Scouting</title>
 		<script type="text/javascript"></script>
+		<link href="../script/choices-library/styles/choices.min.css" rel="stylesheet">
 		<link href="../data/styles.css" rel="stylesheet" type="text/css">
+		<!-- Include choices library -->
+		<script type="text/javascript" src="../script/choices-library/scripts/choices.min.js"></script>
 	</head>
 	<body onload="pick_button(); climbInputDisabling(); defenseInputDisabling();">
 		<h1>NEW SCOUTING REPORT</h1>
@@ -32,10 +35,11 @@
 				<input id="inTeamno" name="teamno" autocomplete="off" required onInput="append_team_name()"><br>
 				<label for="matchno" style="clear: both;">Qualification Match #</label><input id="inMatchno" autocomplete="off" name="matchno" required><br>
 				<div class="tooltip">
-					<span class="tooltiptext">An event key is a unique ID that APIs like The Blue Alliance use to identify events. You can usually find it at the end of a TBA URL (i.e. 2020week0 is the week 0 event for 2020)</span>
-					<label for="eventkey">Event Key</label>
+					<span class="tooltiptext">Pick the event that the match occurred at. If this field is grayed out, then it has already been pre-selected.</span>
+					<label for="eventkey">Event Name</label>
 				</div>
-				<input id="inEventkey" autocomplete="off" required name="eventkey"><br>
+				<select required class="form-control" name="inEventkey" id="inEventkey"></select>
+				<br>
 			</fieldset>
 			
 			<fieldset>
@@ -165,14 +169,23 @@
 		<script type="text/javascript" src="../script/get_team_name.js"></script>
 		<script type="text/javascript" src="../script/submit_report.js"></script>
 		<script type="text/javascript" src="../script/get_version.js"></script>
+		<script type="text/javascript" src="../script/get_event_keys.js"></script>
 		<script>
 			function pick_button() {
 				if (localStorage.source == "master") document.getElementById("cancelButton").href = "master_main.html";
 			}
 			
+			// Initialize event key select box
+			const choices = new Choices(document.getElementById("inEventkey"), {
+				itemSelectText: ""
+			});
+			choices.setChoices(get_all_event_names().map(name => {
+				return { value: ALL_EVENT_KEYS[name], label: name };
+			}), "value", "label");
+
 			if (localStorage.source == "scout") {
-				if (default_event_key != "") document.getElementById("inEventkey").value = default_event_key;
-				if (!allow_event_key_edits) document.getElementById("inEventkey").disabled = true;
+				if (default_event_key != "") choices.setChoiceByValue(default_event_key);
+				if (!allow_event_key_edits) choices.disable();
 			} else if (localStorage.source == "edit") {
 				// Prefill form inputs with edit data and remove button to go to other form type
 				document.getElementById("switchFormButton").style.display = "none";
@@ -188,7 +201,7 @@
 				document.getElementById("inTeamno").value = form.teamno;
 				document.getElementById("inTeamno").disabled = true;
 				document.getElementById("inMatchno").value = form.matchno;
-				document.getElementById("inEventkey").value = form.eventkey;
+				choices.setChoiceByValue(form.eventkey);
 				document.getElementById("inAutocross").checked = form.autocross == "1";
 				document.getElementById("inAutolow").value = form.autolow;
 				document.getElementById("inAutohigh").value = form.autohigh;
